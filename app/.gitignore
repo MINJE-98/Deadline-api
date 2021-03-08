@@ -1,0 +1,10 @@
+node_modules/**/*
+
+# macOS
+.DS_Store
+
+#service
+service/DB.config.js
+service/Facebook.config.js
+
+
