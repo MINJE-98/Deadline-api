@@ -26,7 +26,7 @@ router.get('/:token', auth.get_user);
 
 // PUT api/auth/:token
 // 유저를 업데이트
-router.put('/:token')
+router.put('/:token', auth.update_user);
 
 // DELETE api/auth/:token
 //유저를 삭제 

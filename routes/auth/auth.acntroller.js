@@ -1,5 +1,5 @@
 const DB = require('../../service/DB.connect');
-const fetch = require('node-fetch');
+const axios = require('axios');
 const create = require('../../service/response_json');
 const { today } = require('../../service/today.js');
 
@@ -21,11 +21,11 @@ module.exports.get_user = (req, res, next) =>{
         // 1. 유저 토큰 획득.
         const token = req.params.token;
         // 2. 토큰을 이용해 유저id 획득
-        const userinfo = fetch(`https://graph.facebook.com/me?fields=id%2Cname%2Cemail%2Cpicture.type(large)&access_token=${token}`);
-        
+        const userinfo = axios.get(`https://graph.facebook.com/me?fields=id%2Cname%2Cemail%2Cpicture.type(large)&access_token=${token}`);
+
         userinfo
         // body 텍스트를 json형식으로 가져옴
-            .then( response => response.json())
+            .then( response => response.data)
         // 3. DB에 유저가 있는지 확인
             .then( data =>{
                 const sql = `SELECT * FROM \`users\` WHERE \`uuid\` = ${data.id}`
@@ -58,31 +58,22 @@ module.exports.create_user = (req, res, next) =>{
      * 3. db에 저장
      */
     // 1. 유저 토큰획득.
+
     const token = req.params.token;
     // 2. 토큰을 이용해 사용자 정보를 받아온다.
-    const userinfo = fetch(`https://graph.facebook.com/me?fields=id%2Cname%2Cemail%2Cpicture.type(large)&access_token=${token}`);
+    const userinfo = axios.get(`https://graph.facebook.com/me?fields=id%2Cname%2Cemail%2Cpicture.type(large)&access_token=${token}`);
+
     userinfo
     // body 텍스트를 json형식으로 가져옴
-        .then( response => response.json())
-    // 토큰 검증
-        .then( data =>{
-            if(data.id == undefined){
-                if(data.error.code == 190) return res.status(404).json(create.error('auth', 'FaceBook_OAuthException', '잘못된 형식의 토큰입니다.', '1002'));
-            }
-            return data
-        })
+        .then( response => response.data)
         // 3. db에 저장
         .then( userinfo => {
-            // 토큰 검증
-            if (userinfo.id == undefined) return userinfo;
-            const sql = `INSERT INTO \`users\` (\`uuid\`, \`profileURL\`, \`email\`, \`name\`, \`accesstoken\`, \`lastlogindate\`, \`registerdate\`) values('${userinfo.id}','${userinfo.picture.data.url}','${userinfo.email}','${userinfo.name}','${token}', '${today()}', '${today()}')`
+            const sql = `INSERT INTO deadline.users (\`uuid\`, \`profileURL\`, \`email\`, \`name\`, \`accesstoken\`, \`lastlogindate\`, \`registerdate\`) values('${userinfo.id}','${userinfo.picture.data.url}','${userinfo.email}','${userinfo.name}','${token}', '${today()}', '${today()}')`
             return DB.get_query(sql);
         })
         // 성공
-        .then( result =>{
-            // 토큰 검증
-            if (result.id == undefined) return result;
-            return res.status(200).json(create.success_getdata("auth", '유저 생성 성공했습니다.', "0002", result));
+        .then(() =>{
+            return res.status(200).json(create.success("auth", '유저 생성 성공했습니다.', "0002"));
         })
         // 에러
         .catch(e =>{
@@ -94,4 +85,23 @@ module.exports.create_user = (req, res, next) =>{
                     return next(e);
             }
         })
+}
+
+module.exports.update_user = (req, res, next) =>{
+    /**
+         * TODO
+         * 1. 유저 토큰획득.
+         * 2. 토큰을 이용해 사용자 정보를 받음
+         * 3. db에 저장
+     */
+    const id = req.params('id');
+    const name = req.params('name');
+    const email = req.params('email');
+    const profileURL = req.params('profileURL');
+    const sql = `update users set \`uuiid\` = ${id} where `
+    
+
+
+
+
 }

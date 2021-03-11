@@ -10,7 +10,7 @@ class Database {
 
         if (!result[0]) {
             //질의 결과가 없을경우
-            throw 'DB No results';
+            return null;
         } else {
             //질의 결과가 있을경우
             return result;
@@ -22,7 +22,7 @@ class Database {
 
         if (!result[0]) {
             //질의 결과가 없을경우
-            throw 'DB No results';
+            return null;
         } else {
             //질의 결과가 있을경우
             return result;
