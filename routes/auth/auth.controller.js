@@ -97,8 +97,7 @@ module.exports.update_user = (req, res, next) =>{
     const id = req.params('id');
     const name = req.params('name');
     const email = req.params('email');
-    const profileURL = req.params('profileURL');
-    const sql = `update users set \`uuiid\` = ${id} where `
+    res.send(id + name + email )
     
 
 

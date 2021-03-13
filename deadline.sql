@@ -6,7 +6,7 @@ CREATE TABLE teams
 (
     `tuid`        VARCHAR(6)       NOT NULL  UNIQUE  COMMENT '팀UID', 
     `name`        VARCHAR(20)      NOT NULL    COMMENT '팀이름', 
-    `profileURL`  VARCHAR(1000)    NULL        COMMENT '팀 프로필 사진', 
+    -- `profileURL`  VARCHAR(1000)    NULL        COMMENT '팀 프로필 사진', 
     `makedate`    DATETIME         NOT NULL    COMMENT '팀 생성일자', 
     PRIMARY KEY (tuid)
 );

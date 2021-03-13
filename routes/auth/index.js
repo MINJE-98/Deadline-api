@@ -3,7 +3,7 @@ const express = require('express');
 const router = express.Router();
 
 
-const auth = require('./auth.acntroller');
+const auth = require('./auth.controller');
 /**
  * client와의 로그인 흐름정의
  * 1. 로그인 시도
