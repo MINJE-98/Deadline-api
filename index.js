@@ -1,9 +1,11 @@
 const express = require('express');
+const cors = require('cors');
 
 const app = express();
 
-const indexRouter = require('./routes');
+app.use(cors({origin: true, credentials: true}));
 
+const indexRouter = require('./routes');
 app.use('/api', indexRouter);
 
 app.listen(3000, () => {
