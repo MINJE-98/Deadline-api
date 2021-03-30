@@ -4,7 +4,7 @@ node_modules/**/*
 .DS_Store
 
 #service
-# service/DB.config.js
-# service/Facebook.config.js
+service/DB.config.js
+service/Facebook.config.js
 
 
