@@ -5,6 +5,7 @@ class Database {
     constructor(){
         this.pool = new mysql(config);
     }
+
     async get_query(sql){
         const result = await this.pool.query(sql)
 
@@ -19,14 +20,13 @@ class Database {
 
     async set_query(sql){
         const result = await this.pool.query(sql)
-        return result;
-        // if (!result[0]) {
-        //     //질의 결과가 없을경우
-        //     return result
-        // } else {
-        //     //질의 결과가 있을경우
-            
-        // }
+        if (!result[0]) {
+            //질의 결과가 없을경우
+            throw result
+        } else {
+            //질의 결과가 있을경우
+            return result;
+        }
     }
 
     async isnullcreate(sql, sql2){
@@ -39,6 +39,7 @@ class Database {
             throw true;
         }
     }
+
 }
 
 module.exports = new Database;

@@ -1,35 +1,16 @@
 class Response{
-    error(location, error_kind, msg, error_code){
+    error(errorObj){
         return {
-          "error": "true",
-          "location": `${location}`,
-          "error_kind" : `${error_kind}`,
-          "message": `${msg}`,
-          "error_code": `${error_code}`,
+          "location": `${errorObj.location}`,
+          "message": `${errorObj.message}`,
+          "error_code": `${errorObj.error_code}`,
           };
     }
-    login_success(token, msg, error_code){
+    success(successObj, data){
       return {
-        "token": `${token}`,
-        "error": "false",
-        "message": `${msg}`,
-        "error_code": `${error_code}`
-        };
-    }
-    success(location, msg, error_code){
-      return {
-        "error": "false",
-        "location": `${location}`,
-        "message": `${msg}`,
-        "error_code": `${error_code}`
-        };
-    }
-    success_getdata(location, msg, error_code, data){
-      return {
-        "error": "false",
-        "location": `${location}`,
-        "message": `${msg}`,
-        "error_code": `${error_code}`,
+        "location": `${successObj.location}`,
+        "message": `${successObj.message}`,
+        "error_code": `${successObj.error_code}`,
         "data": data
         };
     }

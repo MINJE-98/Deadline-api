@@ -2,7 +2,7 @@ const express = require('express');
 
 const router = express.Router();
 
-const auth = require('./auth.controller');
+const auth = require('../../controller/auth.controller');
 
 // GET api/auth/:token
 // 유저를 읽음

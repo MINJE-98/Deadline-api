@@ -6,7 +6,6 @@ CREATE TABLE teams
 (
     `tuid`        VARCHAR(6)       NOT NULL  UNIQUE  COMMENT '팀UID', 
     `name`        VARCHAR(20)      NOT NULL    COMMENT '팀이름', 
-    -- `profileURL`  VARCHAR(1000)    NULL        COMMENT '팀 프로필 사진', 
     `makedate`    DATETIME         NOT NULL    COMMENT '팀 생성일자', 
     PRIMARY KEY (tuid)
 );
@@ -115,14 +114,14 @@ ALTER TABLE deadline
 
 ALTER TABLE deadline
     ADD CONSTRAINT FK_deadline_goodsid_goods_goodsid FOREIGN KEY (goodsid)
-        REFERENCES goods (goodsid) ON DELETE SET null ON UPDATE CASCADE;
+        REFERENCES goods (goodsid) ON DELETE SET NULL ON UPDATE CASCADE;
 -- 참조 테이블 [itemimages]
 -- [itemimages]가 삭제 되었을 경우 => 기본값으로 귀속됩니다. (NULL)
 -- [itemimages]가 업데이트 되었을 경우 => 부모와 같이 업데이트 됩니다.
 
 ALTER TABLE deadline
     ADD CONSTRAINT FK_deadline_tagid_tags_tagid FOREIGN KEY (tagid)
-        REFERENCES tags (tagid) ON DELETE SET DEFAULT ON UPDATE CASCADE;
+        REFERENCES tags (tagid) ON DELETE SET NULL ON UPDATE CASCADE;
 -- 참조 테이블 [tags]
 -- [tags]가 삭제 되었을 경우 => 기본값으로 귀속됩니다. (NULL)
 -- [tags]가 업데이트 되었을 경우 => 부모와 같이 업데이트 됩니다.

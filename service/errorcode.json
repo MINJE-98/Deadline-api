@@ -1,0 +1,91 @@
+{
+    "success":{
+        "set_user":{
+            "location": "auth",
+            "error_code": "0001",
+            "message": "유저 생성 성공했습니다."
+        },
+        "get_user":{
+            "location": "auth",
+            "error_code": "0002",
+            "message": "유저 정보를 가져오는데 성공하였습니다."
+        },
+        "set_team":{
+            "location": "teams",
+            "error_code": "0003",
+            "message":"팀 생성에 성공하였습니다."
+        },
+        "get_team":{
+            "location": "teams", 
+            "error_code": "0005",
+            "message": "팀데이터를 가져오는데 성공하였습니다."
+        },
+        "join_team":{
+            "location": "members", 
+            "error_code": "0006",
+            "message": "팀 가입신청에 성공하였습니다."
+        },
+        "get_members":{
+            "location": "members", 
+            "error_code": "0007",
+            "message": "팀에 가입된 유저들을 가져오는데 성공하였습니다."
+        },
+        "get_user_teamlist":{
+            "location": "members", 
+            "error_code": "0008",
+            "message": "한 유저가 가입한 팀리스트를 가져오는데 성공하였습니다."
+        },
+        "set_item":{
+            "location": "items", 
+            "error_code": "0009",
+            "message": "아이템이 성공적으로 생성되었습니다."
+        },
+        "get_items":{
+            "location": "items", 
+            "error_code": "0010",
+            "message": "아이템을 가져오는데 성공하였습니다."
+        },
+        "get_itemlist":{
+            "location": "items", 
+            "error_code": "0011",
+            "message": "아이템리스트를 가져오는데 성공하였습니다."
+        }
+    },
+    "error":{
+        "UNKNOWN_USER" :{
+            "location": "auth",
+            "error_code": "1000",
+            "message": "세션이 만료 되었습니다."
+        },
+        "NOT_FOUND_USER":{
+            "location": "auth",
+            "error_code": "1001",
+            "message": "유저를 찾을 수 없습니다."
+        },
+        "EXIST_USER":{
+            "location": "auth",
+            "error_code": "1002",
+            "message": "이미 유저가 등록되어있습니다."
+        },
+        "EXIST_TEAM":{
+            "location": "teams",
+            "error_code": "1003",
+            "message": "이미 팀이 등록되어있습니다."
+        },
+        "NOT_FOUND_TEAM":{
+            "location": "teams",
+            "error_code": "1004",
+            "message": "팀을 찾을 수 없습니다."
+        },
+        "EXSIT_MEMBER":{
+            "location": "members",
+            "error_code": "1005",
+            "message": "이미 가입된 팀입니다."
+        },
+        "EXIST_ITEM":{
+            "location": "items",
+            "error_code": "1006",
+            "message": "이미 등록되어 있는 상품입니다."
+        }
+    }
+}
