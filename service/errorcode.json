@@ -86,6 +86,11 @@
             "location": "items",
             "error_code": "1006",
             "message": "이미 등록되어 있는 상품입니다."
+        },
+        "NOT_FOUND_ITEM":{
+            "location": "items",
+            "error_code": "1007",
+            "message": "등록된 상품을 찾을 수 없습니다."
         }
     }
 }

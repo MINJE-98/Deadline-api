@@ -64,7 +64,8 @@ module.exports.get_items = async(req, res, next) =>{
         const teamuid = req.param('teamuid');
         
         const result = await DB.pool.query(`SELECT * FROM deadline.goods WHERE tuid = '${teamuid}' AND barcode=${barcode}`);
-        return res.status(200).json(create.success(error_code.success.get_items, result));
+        if (result[0] != undefined) return res.status(200).json(create.success(error_code.success.get_items, result));
+        else return res.status(200).json(create.error(error_code.error.NOT_FOUND_ITEM));
     } catch (e) {
         next(e)
     }
