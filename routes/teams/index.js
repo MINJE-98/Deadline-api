@@ -30,6 +30,6 @@ router.get('/members', members.get_members);
 router.get('/members/teamlist', members.get_user_teamlist);
 
 // GET /api/teams/items?teamuid&barcode
-router.get('/items', items.get_team_items);
+// router.get('/items', items.get_team_items);
 
 module.exports = router;

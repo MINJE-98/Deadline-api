@@ -3,7 +3,7 @@ const create = require('../service/response_json');
 const error_code = require('../service/errorcode.json');
 
 /**
- * POST /api/items?name=&barcode=&teamuid
+ * POST /api/items?barcode={barcode}&prodname={prodname}&teamuid={teamuid}
  * 바코드를 등록합니다.
  * 
  * 1. 바코드, 제품명, 팀UID을 받아옵니다.
@@ -31,34 +31,59 @@ module.exports.set_items = async(req, res, next) =>{
     }
 }
 /**
- * GET /api/items?barcode=&teamuid
+ * GET /api/items?barcode={barcode}&teamuid={teamuid}
+ * 팀에 상품에 있는지 확인합니다.
+ * 
+ * 1. 바코드, 팀UID을 받아옵니다.
+ * 2. 팀이 등록한 바코드가 있는지 확인합니다.
+ */
+module.exports.get_items = async(req, res, next) =>{
+    try {
+        // 1. 바코드, 팀UID을 받아옵니다.
+        const barcode = req.param('barcode');
+        const teamuid = req.param('teamuid');
+        
+        // 2. 팀이 등록한 바코드가 있는지 확인합니다.
+        const result = await DB.pool.query(`SELECT * FROM goods WHERE tuid = '${teamuid}' AND barcode=${barcode}`);
+        return res.status(200).json(create.success(error_code.success.get_items, result));
+    } catch (e) {
+        next(e)
+    }
+}
+
+/**
+ * GET /api/items?barcode={barcode}&teamuid={teamuid}
  * 팀에 상품에 있는지 확인합니다.
  * 
  * 1. 바코드, 팀UID을 받아옵니다.
  * 2. 
  */
-module.exports.get_team_items = async(req, res, next) =>{
+module.exports.get_items = async(req, res, next) =>{
     try {
         const barcode = req.param('barcode');
         const teamuid = req.param('teamuid');
         
-        const result = await DB.pool.query(`SELECT * FROM goods WHERE tuid = '${teamuid}' AND barcode=${barcode}`);
-        console.log(result);
+        const result = await DB.pool.query(`SELECT * FROM deadline.goods WHERE tuid = '${teamuid}' AND barcode=${barcode}`);
+        return res.status(200).json(create.success(error_code.success.get_items, result));
     } catch (e) {
         next(e)
     }
 }
 /**
- * GET /api/items
- * 바코드에 등록된 전체 아이템을 가져옵니다.
+ * GET /api/items/list?barcode={barcode}
+ * 아이템 리스트를 받습니다.
+ * 
  * 1. 바코드를 받아옵니다.
  * 2. 아이템 리스트를 받옵니다.
  */
-module.exports.get_items = async(req, res, next) =>{
+module.exports.get_itemlist = async(req, res, next) =>{
     try {
+        // 1. 바코드를 받아옵니다.
         const barcode = req.param('barcode');
-        const result = await DB.pool.query(`SELECT * FROM deadline.goods WHERE = ${barcode}`);
-        console.log(result[0]);
+
+        // 2. 아이템 리스트를 받옵니다.
+        const result = await DB.pool.query(`SELECT * FROM deadline.goods WHERE barcode = ${barcode}`);
+        return res.status(200).json(create.success(error_code.success.get_itemlist, result));
     } catch (e) {
         next(e)
     }

@@ -39,6 +39,16 @@
             "location": "items", 
             "error_code": "0009",
             "message": "아이템이 성공적으로 생성되었습니다."
+        },
+        "get_items":{
+            "location": "items", 
+            "error_code": "0010",
+            "message": "아이템을 가져오는데 성공하였습니다."
+        },
+        "get_itemlist":{
+            "location": "items", 
+            "error_code": "0011",
+            "message": "아이템리스트를 가져오는데 성공하였습니다."
         }
     },
     "error":{
