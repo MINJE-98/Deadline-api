@@ -19,7 +19,7 @@ CREATE TABLE users
 (
     `uuid`        VARCHAR(100)     NOT NULL    COMMENT '유저UID', 
     `email`        VARCHAR(100)     NOT NULL    COMMENT '유저이메일',
-    `name`        VARCHAR(100)     NOT NULL    COMMENT '유저이름',  
+    `name`        VARCHAR(10)     NOT NULL    COMMENT '유저이름',  
     `profileURL`  VARCHAR(1000)    NULL        COMMENT '유저 프로필 사진',
     `lastlogindate` DATETIME    NOT NULL    COMMENT '마지막 로그인날짜';
     `registerdate` DATETIME    NOT NULL    COMMENT '가입 날짜';
@@ -44,10 +44,10 @@ ALTER TABLE users COMMENT '유저';
 CREATE TABLE goods
 (
     `goodsid`   INT              NOT NULL   AUTO_INCREMENT COMMENT '아이템 아이디', 
-    `tuid`      VARCHAR(6)       DEFAULT NULL           COMMENT '팀UID(FK)', 
+    `tuid`      VARCHAR(6)       DEFAULT NULL  COMMENT '팀UID(FK)', 
     `barcode`   VARCHAR(30)      NOT NULL   COMMENT '바코드', 
     `name`   VARCHAR(100)      NOT NULL   COMMENT '상품 명', 
-    `imageURL`  VARCHAR(1000)    NOT NULL    COMMENT '이미지URL', 
+    `imageURL`  VARCHAR(1000)    DEFAULT NULL    COMMENT '이미지URL', 
     `usecount`  INT              NOT NULL  DEFAULT 0  COMMENT '사용횟수', 
     PRIMARY KEY (goodsid)
 );

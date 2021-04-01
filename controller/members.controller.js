@@ -61,6 +61,28 @@ module.exports.get_members = async(req, res, next) =>{
         next(e)
     }
 }
+
+/**
+ * GET /api/teams/members?teamuid=:temauid?
+ * 팀에 가입된 유저를 가져옵니다.
+ * 1. 유저 id를 가져옵니다.
+ * 2. 팀 UID를 가져옵니다.
+ * 3. 팀에 소속된 유저들을 가져옵니다.
+ * ERROR:
+ * 
+ */
+ module.exports.get_members = async(req, res, next) =>{
+    try {
+        const userid = req.userinfo.id;
+        // 2. 팀 UID를 가져옵니다.
+        const teamuid = req.param('teamuid');
+        // 2. 팀에 소속된 유저들을 가져옵니다.
+        const result = await DB.pool.query(`SELECT u.uuid, u.name, u.profileURL , t.state FROM teamembers t, users u WHERE t.tuid ='${teamuid}' AND u.uuid = '${userid}'`);
+        return res.status(200).json(create.success(error_code.success.get_members, result[0]));
+    } catch (e) {
+        next(e)
+    }
+}
 /**
  * GET /api/teams/members/teamlist
  * 한 유저가 가입한 팀리스트를 가져옵니다.
