@@ -18,14 +18,18 @@ module.exports.set_items = async(req, res, next) =>{
         const prodname = req.param('prodname');
         
         // 2. 팀UID에 같은 바코드의 상품이 있는지 확인합니다.
-        const result = await DB.pool.query(`SELECT * FROM goods WHERE tuid = '${teamuid}' AND barcode=${barcode}`);
+        const result = await DB.pool.query(`SELECT * FROM deadline.goods WHERE tuid = '${teamuid}' AND barcode=${barcode}`);
+        console.log(result);
         if (result[0] == undefined) {
             // 3. 받아온 상품 정보를 등록합니다.
-            await DB.pool.query(`INSERT INTO goods(tuid, barcode, name, imageURL) VALUES('${teamuid}', '${barcode}', '${prodname}', '')`);
+            await DB.pool.query(`INSERT INTO deadline.goods(tuid, barcode, name, imageURL) VALUES('${teamuid}', '${barcode}', '${prodname}', '')`);
             return res.status(200).json(create.success(error_code.success.set_item, null));
         }
         // 이미 같은 상품이 등록되어 있습니다.
-        else return res.status(404).json(create.error(error_code.error.EXIST_ITEM));
+        else {
+            await DB.pool.query(`UPDATE deadline.goods SET barcode = '${barcode}', name = '${prodname}' WHERE goodsid = ${result[0].goodsid}`);
+            return res.status(200).json(create.error(error_code.success.update_iteminfo));
+        }
     } catch (e) {
         next(e)
     }
@@ -65,7 +69,7 @@ module.exports.get_items = async(req, res, next) =>{
         
         const result = await DB.pool.query(`SELECT * FROM deadline.goods WHERE tuid = '${teamuid}' AND barcode=${barcode}`);
         if (result[0] != undefined) return res.status(200).json(create.success(error_code.success.get_items, result));
-        else return res.status(200).json(create.error(error_code.error.NOT_FOUND_ITEM));
+        else return res.status(200).json(create.success(error_code.error.NOT_FOUND_ITEM, result));
     } catch (e) {
         next(e)
     }

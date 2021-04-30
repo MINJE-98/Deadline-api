@@ -10,22 +10,28 @@ const router = express.Router();
 
 // 유저 appid 확인
 //middle ware
-const token = require('../service/tokencheck');
+const token = require('../controller/usercheck.controller');
 router.use(token.tokencheck)
 
 // 유저 정보 인증
 const auth = require('./auth');
 router.use('/auth', auth);
 
-
 // 팀
 const teams = require('./teams');
 router.use('/teams', teams);
+
+// 팀멤버
+const members = require('./teams/members');
+router.use('/teams/members', members);
 
 // 아이템
 const items = require('./items');
 router.use('/items', items);
 
+// 유통기한
+const deadline = require('./deadline');
+router.use('/deadline', deadline);
 
 
 module.exports = router;

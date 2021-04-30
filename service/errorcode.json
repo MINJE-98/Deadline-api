@@ -28,12 +28,12 @@
         "get_members":{
             "location": "members", 
             "error_code": "0007",
-            "message": "팀에 가입된 유저들을 가져오는데 성공하였습니다."
+            "message": "팀에 가입된 유저들을 가져왔습니다."
         },
         "get_user_teamlist":{
             "location": "members", 
             "error_code": "0008",
-            "message": "한 유저가 가입한 팀리스트를 가져오는데 성공하였습니다."
+            "message": "유저가 가입한 팀리스트를 가져왔습니다."
         },
         "set_item":{
             "location": "items", 
@@ -43,12 +43,22 @@
         "get_items":{
             "location": "items", 
             "error_code": "0010",
-            "message": "아이템을 가져오는데 성공하였습니다."
+            "message": "아이템을 가져오는데 가져왔습니다."
         },
         "get_itemlist":{
             "location": "items", 
             "error_code": "0011",
-            "message": "아이템리스트를 가져오는데 성공하였습니다."
+            "message": "아이템리스트를 가져왔습니다."
+        },
+        "update_iteminfo":{
+            "location": "items",
+            "error_code": "0012",
+            "message": "아이템정보를 업데이트 하였습니다."
+        },
+        "set_deadline":{
+            "location": "deadline",
+            "error_code": "0013",
+            "message": "유통기한을 등록하였습니다."
         }
     },
     "error":{
@@ -82,14 +92,9 @@
             "error_code": "1005",
             "message": "이미 가입된 팀입니다."
         },
-        "EXIST_ITEM":{
-            "location": "items",
-            "error_code": "1006",
-            "message": "이미 등록되어 있는 상품입니다."
-        },
         "NOT_FOUND_ITEM":{
             "location": "items",
-            "error_code": "1007",
+            "error_code": "1006",
             "message": "등록된 상품을 찾을 수 없습니다."
         }
     }
