@@ -17,48 +17,54 @@
         },
         "get_team":{
             "location": "teams", 
-            "error_code": "0005",
+            "error_code": "0004",
             "message": "팀데이터를 가져오는데 성공하였습니다."
         },
         "join_team":{
             "location": "members", 
-            "error_code": "0006",
+            "error_code": "0005",
             "message": "팀 가입신청에 성공하였습니다."
         },
         "get_members":{
             "location": "members", 
-            "error_code": "0007",
+            "error_code": "0006",
             "message": "팀에 가입된 유저들을 가져왔습니다."
         },
         "get_user_teamlist":{
             "location": "members", 
-            "error_code": "0008",
+            "error_code": "0007",
             "message": "유저가 가입한 팀리스트를 가져왔습니다."
         },
         "set_item":{
             "location": "items", 
-            "error_code": "0009",
+            "error_code": "0008",
             "message": "아이템이 성공적으로 생성되었습니다."
         },
-        "get_items":{
+        "team_search_item":{
             "location": "items", 
-            "error_code": "0010",
+            "error_code": "0009",
             "message": "아이템을 가져오는데 가져왔습니다."
         },
-        "get_itemlist":{
+        "total_search_item":{
             "location": "items", 
-            "error_code": "0011",
+            "error_code": "0010",
             "message": "아이템리스트를 가져왔습니다."
         },
         "update_iteminfo":{
             "location": "items",
-            "error_code": "0012",
+            "error_code": "0011",
             "message": "아이템정보를 업데이트 하였습니다."
         },
+        
         "set_deadline":{
             "location": "deadline",
-            "error_code": "0013",
+            "error_code": "0012",
             "message": "유통기한을 등록하였습니다."
+        },
+        "get_deadline":{
+            "location": "deadline",
+            "error_code": "0013",
+            "message": "등록된 유통기한을 가져왔습니다."
         }
     },
     "error":{
@@ -96,6 +102,16 @@
             "location": "items",
             "error_code": "1006",
             "message": "등록된 상품을 찾을 수 없습니다."
+        },
+        "EXSIT_ITEM":{
+            "location": "teamcheck",
+            "error_code": "1007",
+            "message": "이미 같은 상품이 등록되어있습니다."
+        },
+        "UNJOINED_TEAM":{
+            "location": "teamcheck",
+            "error_code": "1008",
+            "message": "가입된 팀이 아닙니다."
         }
     }
 }

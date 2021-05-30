@@ -17,13 +17,18 @@ router.use(token.tokencheck)
 const auth = require('./auth');
 router.use('/auth', auth);
 
+// 팀멤버
+const members = require('./teams/members');
+router.use('/teams/members', members);
+
 // 팀
 const teams = require('./teams');
 router.use('/teams', teams);
 
-// 팀멤버
-const members = require('./teams/members');
-router.use('/teams/members', members);
+// 유저 
+//middle ware
+const teamcheck = require('../controller/teamcheck.controller');
+router.use(teamcheck.teamcheck)
 
 // 아이템
 const items = require('./items');
