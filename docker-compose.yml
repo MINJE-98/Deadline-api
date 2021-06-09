@@ -1,0 +1,20 @@
+version: '3.2'
+services:
+  # server:
+  #   container_name: server
+  #   hostname: localhost
+  #   build:
+  #     context: .
+  #     dockerfile: ./docker/dockerfile
+  #   ports:
+  #     - 3000:3000
+  db:
+    image: mysql:8
+    container_name: database
+    ports:
+      - 3307:3306
+    environment:
+      MYSQL_ROOT_PASSWORD: 'Baas**&112'
+    command:
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_unicode_ci
