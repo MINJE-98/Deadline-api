@@ -1,4 +1,19 @@
-﻿
+﻿-- users Table Create SQL
+CREATE TABLE Users
+(
+    `uuid`        INT           NOT NULL   AUTO_INCREMENT COMMENT 'UUID', 
+    `user_id`        VARCHAR(255)     NOT NULL    COMMENT '유저 id', 
+    `email`        VARCHAR(255)     NOT NULL    COMMENT '유저이메일',
+    `name`        VARCHAR(255)     NOT NULL    COMMENT '유저이름',  
+    `profileURL`  VARCHAR(255)    NULL        COMMENT '유저 프로필 사진',
+    `lastlogindate` DATETIME    NOT NULL    COMMENT '마지막 로그인날짜';
+    `registerdate` DATETIME    NOT NULL    COMMENT '가입 날짜';
+    PRIMARY KEY (uuid)
+);
+
+ALTER TABLE users COMMENT '유저';
+
+
 -- 테이블 순서는 관계를 고려하여 한 번에 실행해도 에러가 발생하지 않게 정렬되었습니다.
 
 -- teams Table Create SQL
@@ -13,20 +28,6 @@ CREATE TABLE teams
 ALTER TABLE teams COMMENT '팀';
 
 -- 팀UID는 오직 하나의 값만 존재할 수 있다.
-
--- users Table Create SQL
-CREATE TABLE users
-(
-    `uuid`        VARCHAR(100)     NOT NULL    COMMENT '유저UID', 
-    `email`        VARCHAR(100)     NOT NULL    COMMENT '유저이메일',
-    `name`        VARCHAR(10)     NOT NULL    COMMENT '유저이름',  
-    `profileURL`  VARCHAR(1000)    NULL        COMMENT '유저 프로필 사진',
-    `lastlogindate` DATETIME    NOT NULL    COMMENT '마지막 로그인날짜';
-    `registerdate` DATETIME    NOT NULL    COMMENT '가입 날짜';
-    PRIMARY KEY (uuid)
-);
-
-ALTER TABLE users COMMENT '유저';
 
 -- itmes Table Create SQL
 -- CREATE TABLE itmes

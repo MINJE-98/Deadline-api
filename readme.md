@@ -1,3 +1,6 @@
+# Deadline api
+이전 express로 작성되었던 deadline을 nest로 리페키징을 하였습니다.
+
 
 ## Installation
 
