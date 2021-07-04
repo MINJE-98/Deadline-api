@@ -7,5 +7,7 @@ export class UsersController {
   @Post()
   postUsers() {}
   @Patch()
-  updateUsers() {}
+  updateUsers() {
+    ('');
+  }
 }
