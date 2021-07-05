@@ -10,7 +10,7 @@ import e from './entities';
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
-      envFilePath: process.env.NODE_ENV == 'dev' ? '.env.dev' : '.env',
+      envFilePath: process.env.NODE_ENV == 'dev' ? '.env' : '.env.dev',
       // ignoreEnvFile: process.env.NODE_ENV === 'prod',
     }),
     TypeOrmModule.forRoot({
@@ -30,7 +30,7 @@ import e from './entities';
         e.Deadlines,
       ],
       logging: true,
-      synchronize: true, // false가 안전함
+      synchronize: false, // false가 안전함
     }),
     UsersModule,
     TeamsModule,
