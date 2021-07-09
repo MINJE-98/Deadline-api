@@ -1,39 +1,56 @@
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
-import { Deadlines } from "./Deadlines";
-import { Items } from "./Items";
-import { Tags } from "./Tags";
-import { TeamMembers } from "./TeamMembers";
+import { ApiProperty } from '@nestjs/swagger';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Deadline } from './Deadline';
+import { Items } from './Items';
+import { Tags } from './Tags';
+import { Teamembers } from './Teamembers';
 
-@Entity("Teams", { schema: "Deadline" })
+@Entity('Teams', { schema: 'Deadline' })
 export class Teams {
-  @PrimaryGeneratedColumn({ type: "int", name: "id", comment: "팀아이디" })
+  @ApiProperty({
+    example: '1',
+    description: '팀 아이디',
+  })
+  @PrimaryGeneratedColumn({ type: 'int', name: 'id', comment: '팀ID' })
   id: number;
 
-  @Column("varchar", { name: "name", comment: "팀이름", length: 100 })
+  @ApiProperty({
+    example: '가톨릭 요양병원',
+    description: '팀 이름',
+  })
+  @Column('varchar', { name: 'name', comment: '팀이름', length: 20 })
   name: string;
 
-  @Column("datetime", { name: "createAt", comment: "팀생성일자" })
+  @ApiProperty({
+    example: '2021-07-09:15:31:32',
+    description: '팀 생성일자',
+  })
+  @Column('datetime', { name: 'createAt', comment: '생성일자' })
   createAt: Date;
 
-  @Column("datetime", { name: "updateAt", comment: "팀수정일자" })
+  @ApiProperty({
+    example: '2021-07-09:15:31:32',
+    description: '팀 수정일자',
+  })
+  @Column('datetime', { name: 'updateAt', comment: '수정일자' })
   updateAt: Date;
 
-  @Column("datetime", {
-    name: "deleteAt",
-    nullable: true,
-    comment: "팀삭제일자",
+  @ApiProperty({
+    example: '2021-07-10:15:31:32',
+    description: '팀 삭제일자',
   })
+  @Column('datetime', { name: 'deleteAt', nullable: true, comment: '삭제일자' })
   deleteAt: Date | null;
 
-  @OneToMany(() => Deadlines, (deadlines) => deadlines.team)
-  deadlines: Deadlines[];
+  @OneToMany(() => Deadline, deadline => deadline.team)
+  deadlines: Deadline[];
 
-  @OneToMany(() => Items, (items) => items.team)
+  @OneToMany(() => Items, items => items.team)
   items: Items[];
 
-  @OneToMany(() => Tags, (tags) => tags.team)
+  @OneToMany(() => Tags, tags => tags.team)
   tags: Tags[];
 
-  @OneToMany(() => TeamMembers, (teamMembers) => teamMembers.team)
-  teamMembers: TeamMembers[];
+  @OneToMany(() => Teamembers, teamembers => teamembers.team)
+  teamembers: Teamembers[];
 }

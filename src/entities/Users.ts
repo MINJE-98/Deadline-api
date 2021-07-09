@@ -1,79 +1,76 @@
-import {
-  Column,
-  Entity,
-  Index,
-  JoinColumn,
-  ManyToOne,
-  OneToMany,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
-import { TeamMembers } from './TeamMembers';
-import { SocialAccounts } from './SocialAccounts';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { ApiProperty } from '@nestjs/swagger';
+import { Teamembers } from './Teamembers';
 
-@Index('FK_Users_socialID_SocialAccounts_id', ['socialId'], {})
 @Entity('Users', { schema: 'Deadline' })
 export class Users {
   @ApiProperty({
-    example: 1,
-    description: '사용자 아이디',
+    example: '1',
+    description: '유저 아이디',
   })
   @PrimaryGeneratedColumn({ type: 'int', name: 'id', comment: 'ID' })
   id: number;
 
   @ApiProperty({
-    example: 1,
-    description: '소셜로그인 아이디',
+    example: '1651943768',
+    description: '소셜 UID',
   })
-  @Column('int', { name: 'socialID', nullable: true, comment: 'UID' })
-  socialId: number | null;
+  @Column('varchar', { name: 'socialId', comment: '소셜 id', length: 255 })
+  socialId: string;
 
   @ApiProperty({
-    example: '워뇨띠',
-    description: '사용자 이름',
+    example: 'minje9801@gmail.com',
+    description: '이메일',
   })
-  @Column('varchar', { name: 'name', comment: '유저이름', length: 100 })
+  @Column('varchar', {
+    name: 'email',
+    nullable: true,
+    comment: '유저이메일',
+    length: 255,
+  })
+  email: string | null;
+
+  @ApiProperty({
+    example: '조민제',
+    description: '유저 이름',
+  })
+  @Column('varchar', { name: 'name', comment: '유저이름', length: 255 })
   name: string;
 
   @ApiProperty({
-    example: 'jmj012100@gmail.com',
-    description: '사용자 이메일',
+    example:
+      'http://k.kakaocdn.net/dn/j0pwB/btqV2J9RykT/mmxQS5VBGi42ddfenlMp6K/img_110x110.jpg',
+    description: '유저 프로필 사진',
   })
-  @Column('varchar', { name: 'email', comment: '유저이메일', length: 100 })
-  email: string;
+  @Column('varchar', {
+    name: 'profileURL',
+    nullable: true,
+    comment: '유저 프로필 사진',
+    length: 255,
+  })
+  profileUrl: string | null;
 
   @ApiProperty({
-    example: '2021-07-05',
+    example: '2021-07-09:15:31:32',
     description: '유저 생성일자',
   })
-  @Column('datetime', { name: 'createAt', comment: '유저생성일자' })
+  @Column('datetime', { name: 'createAt', comment: '생성일자' })
   createAt: Date;
 
   @ApiProperty({
-    example: '2021-07-05',
+    example: '2021-07-09:15:31:32',
     description: '유저 수정일자',
   })
-  @Column('datetime', { name: 'updateAt', comment: '유저수정일자' })
+  @Column('datetime', { name: 'updateAt', comment: '수정일자' })
   updateAt: Date;
 
   @ApiProperty({
-    example: '2021-07-05',
+    example: '2021-07-10:01:01:32',
     description: '유저 삭제일자',
   })
-  @Column('datetime', {
-    name: 'deleteAt',
-    nullable: true,
-    comment: '유저삭제일자',
-  })
+  @Column('datetime', { name: 'deleteAt', nullable: true, comment: '삭제일자' })
   deleteAt: Date | null;
 
-  @OneToMany(() => TeamMembers, teamMembers => teamMembers.user)
-  teamMembers: TeamMembers[];
-
-  @ManyToOne(() => SocialAccounts, socialAccounts => socialAccounts.users, {
-    onDelete: 'SET NULL',
-    onUpdate: 'CASCADE',
-  })
-  @JoinColumn([{ name: 'socialID', referencedColumnName: 'id' }])
-  social: SocialAccounts;
+  @OneToMany(() => Teamembers, teamembers => teamembers.user)
+  teamembers: Teamembers[];
 }
