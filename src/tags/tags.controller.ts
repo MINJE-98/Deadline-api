@@ -49,13 +49,13 @@ export class TagsController {
     return this.tagsService.updateTag(+tagId, updateTagDto);
   }
 
-  @Delete(':id')
+  @Delete(':tagId')
   @ApiOperation({
     summary: '특정 테그 삭제',
     description: '특정 테그를 삭제합니다.',
   })
   @ApiResponse({ status: 200, description: '성공', type: Tags })
-  removeTag(@Param('id') id: string) {
+  removeTag(@Param('tagId') id: string) {
     return this.tagsService.removeTag(+id);
   }
 }

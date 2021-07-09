@@ -36,33 +36,36 @@ export class DaedlineController {
     return this.daedlineService.findAllDeadline();
   }
 
-  @Get(':id')
+  @Get(':DeadlineId')
   @ApiOperation({
     summary: '특정 유통기한 조회',
     description: '등록한 전체 유통기한 조회합니다.',
   })
   @ApiResponse({ status: 200, description: '성공', type: Deadline })
-  findDeadline(@Param('id') id: string) {
+  findDeadline(@Param('DeadlineId') id: string) {
     return this.daedlineService.findDeadline(+id);
   }
 
-  @Patch(':id')
+  @Patch(':DeadlineId')
   @ApiOperation({
     summary: '특정 유통기한 수정',
     description: '등록한 전체 유통기한 수정합니다',
   })
   @ApiResponse({ status: 200, description: '성공', type: Deadline })
-  updateDeadline(@Param('id') id: string, @Body() updateDaedlineDto: Deadline) {
+  updateDeadline(
+    @Param('DeadlineId') id: string,
+    @Body() updateDaedlineDto: Deadline,
+  ) {
     return this.daedlineService.updateDeadline(+id, updateDaedlineDto);
   }
 
-  @Delete(':id')
+  @Delete(':DeadlineId')
   @ApiOperation({
     summary: '특정 유통기한 삭제',
     description: '등록한 전체 유통기한 삭제합니다',
   })
   @ApiResponse({ status: 200, description: '성공', type: Deadline })
-  removeDeadline(@Param('id') id: string) {
+  removeDeadline(@Param('DeadlineId') id: string) {
     return this.daedlineService.removeDeadline(+id);
   }
 }
