@@ -5,15 +5,13 @@ import { ConfigModule } from '@nestjs/config';
 import { UsersModule } from './users/users.module';
 import { TeamsModule } from './teams/teams.module';
 import { AuthModule } from './auth/auth.module';
-import { Users } from './entities/Users';
-import { SocialAccounts } from './entities/SocialAccounts';
-
+import e from './entities';
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
-      envFilePath: process.env.NODE_ENV == 'dev' ? '.env.dev' : '.env.test',
-      ignoreEnvFile: process.env.NODE_ENV === 'prod',
+      envFilePath: process.env.NODE_ENV == 'dev' ? '.env' : '.env.dev',
+      // ignoreEnvFile: process.env.NODE_ENV === 'prod',
     }),
     TypeOrmModule.forRoot({
       type: 'mysql',
@@ -22,9 +20,17 @@ import { SocialAccounts } from './entities/SocialAccounts';
       username: process.env.DB_USERNAME,
       password: process.env.DB_PASSWORD,
       database: process.env.DB_DATABASE_NAME,
-      entities: [Users, SocialAccounts],
+      entities: [
+        e.Users,
+        e.SocialAccounts,
+        e.Teams,
+        e.TeamMembers,
+        e.Tags,
+        e.Items,
+        e.Deadlines,
+      ],
       logging: true,
-      synchronize: true, // false가 안전함
+      synchronize: false, // false가 안전함
     }),
     UsersModule,
     TeamsModule,
