@@ -1,3 +1,4 @@
+import { ApiProperty } from '@nestjs/swagger';
 import {
   Column,
   Entity,
@@ -7,54 +8,80 @@ import {
   OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { Deadlines } from './Deadlines';
+import { Deadline } from './Deadline';
 import { Teams } from './Teams';
 
-@Index('FK_Items_teamId_Teams_id', ['teamId'], {})
+@Index('FK_Items_teamid_Teams_teamid', ['teamid'], {})
 @Entity('Items', { schema: 'Deadline' })
 export class Items {
-  @PrimaryGeneratedColumn({ type: 'int', name: 'id', comment: '아이템아이디' })
+  @ApiProperty({
+    example: '1',
+    description: '아이템 아이디',
+  })
+  @PrimaryGeneratedColumn({ type: 'int', name: 'id', comment: '아이템 아이디' })
   id: number;
 
-  @Column('int', { name: 'teamId', comment: '팀아이디', nullable: true })
-  teamId: number | null;
-
-  @Column('varchar', { name: 'name', comment: '아이템이름', length: 100 })
-  name: string;
-
-  @Column('varchar', {
-    name: 'itemImage',
-    comment: '아이템이미지',
-    length: 255,
+  @ApiProperty({
+    example: '1',
+    description: '팀 아이디',
   })
-  itemImage: string;
+  @Column('int', { name: 'teamid', nullable: true, comment: '팀 아이디(FK)' })
+  teamid: number | null;
 
-  @Column('varchar', { name: 'barcode', comment: '아이템바코드', length: 255 })
+  @ApiProperty({
+    example: '880123123123',
+    description: '아이템 바코드',
+  })
+  @Column('varchar', { name: 'barcode', comment: '바코드', length: 255 })
   barcode: string;
 
-  @Column('varchar', { name: 'itemsTag', comment: '아이템 테그', length: 100 })
-  itemsTag: string;
+  @ApiProperty({
+    example: '아이시스',
+    description: '아이템 상품명',
+  })
+  @Column('varchar', { name: 'name', comment: '상품 명', length: 100 })
+  name: string;
 
-  @Column('datetime', { name: 'createAt', comment: '아이템생성일자' })
+  @ApiProperty({
+    example: 'https://aws.sdufybhsjds.com/image',
+    description: '아이템 이미지',
+  })
+  @Column('varchar', {
+    name: 'imageURL',
+    nullable: true,
+    comment: '이미지URL',
+    length: 255,
+  })
+  imageUrl: string | null;
+
+  @ApiProperty({
+    example: '2021-07-09:15:31:32',
+    description: '아이템 생성일자',
+  })
+  @Column('datetime', { name: 'createAt', comment: '생성일자' })
   createAt: Date;
 
-  @Column('datetime', { name: 'updateAt', comment: '아이템수정일자' })
+  @ApiProperty({
+    example: '2021-07-09:15:31:32',
+    description: '아이템 수정일자',
+  })
+  @Column('datetime', { name: 'updateAt', comment: '수정일자' })
   updateAt: Date;
 
-  @Column('datetime', {
-    name: 'deleteAt',
-    nullable: true,
-    comment: '아이템삭제일자',
+  @ApiProperty({
+    example: '2021-07-10:15:31:32',
+    description: '아이템 삭제일자',
   })
+  @Column('datetime', { name: 'deleteAt', nullable: true, comment: '삭제일자' })
   deleteAt: Date | null;
 
-  @OneToMany(() => Deadlines, deadlines => deadlines.item)
-  deadlines: Deadlines[];
+  @OneToMany(() => Deadline, deadline => deadline.item)
+  deadlines: Deadline[];
 
   @ManyToOne(() => Teams, teams => teams.items, {
     onDelete: 'SET NULL',
     onUpdate: 'CASCADE',
   })
-  @JoinColumn([{ name: 'teamId', referencedColumnName: 'id' }])
+  @JoinColumn([{ name: 'teamid', referencedColumnName: 'id' }])
   team: Teams;
 }

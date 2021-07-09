@@ -1,17 +1,6 @@
-import { Deadlines } from './Deadlines';
-import { Items } from './Items';
-import { SocialAccounts } from './SocialAccounts';
-import { Tags } from './Tags';
-import { TeamMembers } from './TeamMembers';
-import { Teams } from './Teams';
-import { Users } from './Users';
-
-export default {
-  Users,
-  Teams,
-  TeamMembers,
-  Tags,
-  SocialAccounts,
-  Items,
-  Deadlines,
-};
+export { Deadline } from './Deadline';
+export { Users } from './Users';
+export { Items } from './Items';
+export { Tags } from './Tags';
+export { Teamembers } from './Teamembers';
+export { Teams } from './Teams';

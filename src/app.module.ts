@@ -2,10 +2,12 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { join } from 'path';
 import { ConfigModule } from '@nestjs/config';
+import * as e from './entities';
 import { UsersModule } from './users/users.module';
 import { TeamsModule } from './teams/teams.module';
-import { AuthModule } from './auth/auth.module';
-import e from './entities';
+import { ItemsModule } from './items/items.module';
+import { TagsModule } from './tags/tags.module';
+import { DaedlineModule } from './daedline/daedline.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -20,21 +22,15 @@ import e from './entities';
       username: process.env.DB_USERNAME,
       password: process.env.DB_PASSWORD,
       database: process.env.DB_DATABASE_NAME,
-      entities: [
-        e.Users,
-        e.SocialAccounts,
-        e.Teams,
-        e.TeamMembers,
-        e.Tags,
-        e.Items,
-        e.Deadlines,
-      ],
+      entities: [e.Deadline, e.Users, e.Teams, e.Teamembers, e.Tags, e.Items],
       logging: true,
       synchronize: false, // false가 안전함
     }),
     UsersModule,
     TeamsModule,
-    AuthModule,
+    ItemsModule,
+    TagsModule,
+    DaedlineModule,
   ],
   controllers: [],
   providers: [],
