@@ -7,6 +7,8 @@ import {
   Param,
   Delete,
   UseGuards,
+  Headers,
+  Request,
 } from '@nestjs/common';
 import {
   ApiBody,
@@ -17,11 +19,14 @@ import {
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
+import { request } from 'express';
 import { TokenCheck } from 'src/auth/token.check.guard';
+import { GetUserInfoInterceptor } from 'src/common/interceptors/getUserinfo.interceptor';
+import { Token } from 'src/entities';
 import { Users } from '../entities/Users';
 import { UsersService } from './users.service';
 
-// @UseGuards(TokenCheck)
+@UseGuards(TokenCheck)
 @ApiTags('Users')
 @Controller('users')
 export class UsersController {
@@ -36,8 +41,9 @@ export class UsersController {
   @ApiOperation({ summary: '유저 생성', description: '유저를 생성합니다.' })
   @ApiResponse({ status: 200, description: '성공', type: Users })
   @ApiResponse({ status: 500, description: '서버에러' })
-  createUser(@Body() data: Users) {
-    return this.usersService.createUser(data);
+  createUser(@Headers() query: Token, @Request() res: any) {
+    // console.log(user);
+    return this.usersService.createUser(res);
   }
 
   @Get(':userid')
