@@ -1,3 +1,4 @@
+export { Token } from './Token';
 export { Deadline } from './Deadline';
 export { Users } from './Users';
 export { Items } from './Items';
