@@ -1,10 +1,12 @@
 import { Injectable } from '@nestjs/common';
-import { Users } from 'src/entities';
+import { Token, Users } from 'src/entities';
 
 @Injectable()
 export class UsersService {
-  createUser(data: Users) {
-    const { name } = data;
+  createUser(res: any) {
+    const { id } = res.body;
+    console.log(res);
+
     // 유저 등록
     return `유저 생성 성공! `;
   }
