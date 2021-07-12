@@ -21,8 +21,7 @@ import {
 } from '@nestjs/swagger';
 import { request } from 'express';
 import { TokenCheck } from 'src/auth/token.check.guard';
-import { GetUserInfoInterceptor } from 'src/common/interceptors/getUserinfo.interceptor';
-import { Token } from 'src/entities';
+import { Token } from '../common/dto';
 import { Users } from '../entities/Users';
 import { UsersService } from './users.service';
 
