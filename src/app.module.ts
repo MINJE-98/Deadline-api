@@ -7,7 +7,7 @@ import { UsersModule } from './users/users.module';
 import { TeamsModule } from './teams/teams.module';
 import { ItemsModule } from './items/items.module';
 import { TagsModule } from './tags/tags.module';
-import { DaedlineModule } from './daedline/daedline.module';
+import { DaedlineModule } from './daedlines/daedline.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
