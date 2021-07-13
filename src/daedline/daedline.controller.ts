@@ -8,7 +8,7 @@ import {
   Delete,
 } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { Deadline } from 'src/entities';
+import { Deadlines } from 'src/entities';
 import { DaedlineService } from './daedline.service';
 
 @ApiTags('Deadline')
@@ -21,8 +21,8 @@ export class DaedlineController {
     summary: '유통기한 등록',
     description: '유통기한 등록합니다.',
   })
-  @ApiResponse({ status: 200, description: '성공', type: Deadline })
-  createDeadline(@Body() createDaedlineDto: Deadline) {
+  @ApiResponse({ status: 200, description: '성공', type: Deadlines })
+  createDeadline(@Body() createDaedlineDto: Deadlines) {
     return this.daedlineService.createDeadline(createDaedlineDto);
   }
 
@@ -31,7 +31,7 @@ export class DaedlineController {
     summary: '등록한 전체 유통기한 조회',
     description: '등록한 전체 유통기한 가져오기',
   })
-  @ApiResponse({ status: 200, description: '성공', type: Deadline })
+  @ApiResponse({ status: 200, description: '성공', type: Deadlines })
   findAllDeadline() {
     return this.daedlineService.findAllDeadline();
   }
@@ -41,7 +41,7 @@ export class DaedlineController {
     summary: '특정 유통기한 조회',
     description: '등록한 전체 유통기한 조회합니다.',
   })
-  @ApiResponse({ status: 200, description: '성공', type: Deadline })
+  @ApiResponse({ status: 200, description: '성공', type: Deadlines })
   findDeadline(@Param('DeadlineId') id: string) {
     return this.daedlineService.findDeadline(+id);
   }
@@ -51,10 +51,10 @@ export class DaedlineController {
     summary: '특정 유통기한 수정',
     description: '등록한 전체 유통기한 수정합니다',
   })
-  @ApiResponse({ status: 200, description: '성공', type: Deadline })
+  @ApiResponse({ status: 200, description: '성공', type: Deadlines })
   updateDeadline(
     @Param('DeadlineId') id: string,
-    @Body() updateDaedlineDto: Deadline,
+    @Body() updateDaedlineDto: Deadlines,
   ) {
     return this.daedlineService.updateDeadline(+id, updateDaedlineDto);
   }
@@ -64,7 +64,7 @@ export class DaedlineController {
     summary: '특정 유통기한 삭제',
     description: '등록한 전체 유통기한 삭제합니다',
   })
-  @ApiResponse({ status: 200, description: '성공', type: Deadline })
+  @ApiResponse({ status: 200, description: '성공', type: Deadlines })
   removeDeadline(@Param('DeadlineId') id: string) {
     return this.daedlineService.removeDeadline(+id);
   }

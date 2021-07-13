@@ -11,11 +11,11 @@ import { Items } from './Items';
 import { Tags } from './Tags';
 import { Teams } from './Teams';
 
-@Index('FK_Deadline_itemid_Items_itemid', ['itemid'], {})
-@Index('FK_Deadline_tagid_Tags_tagid', ['tagid'], {})
-@Index('FK_Deadline_teamid_Teams_teamid', ['teamid'], {})
-@Entity('Deadline', { schema: 'Deadline' })
-export class Deadline {
+@Index('FK_Deadlines_itemid_Items_itemid', ['itemid'], {})
+@Index('FK_Deadlines_tagid_Tags_tagid', ['tagid'], {})
+@Index('FK_Deadlines_teamid_Teams_teamid', ['teamid'], {})
+@Entity('Deadlines', { schema: 'Deadline' })
+export class Deadlines {
   @PrimaryGeneratedColumn({
     type: 'int',
     name: 'id',
