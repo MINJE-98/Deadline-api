@@ -11,8 +11,8 @@ import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Deadlines } from 'src/entities';
 import { DaedlineService } from './daedline.service';
 
-@ApiTags('Deadline')
-@Controller('daedline')
+@ApiTags('Deadlines')
+@Controller('daedlines')
 export class DaedlineController {
   constructor(private readonly daedlineService: DaedlineService) {}
 
