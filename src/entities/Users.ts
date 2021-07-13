@@ -12,11 +12,11 @@ export class Users {
   id: number;
 
   @ApiProperty({
-    example: '1651943768',
+    example: '1804030582',
     description: '소셜 UID',
   })
   @Column('varchar', { name: 'socialId', comment: '소셜 id', length: 255 })
-  socialId: string;
+  socialId: number;
 
   @ApiProperty({
     example: 'minje9801@gmail.com',
