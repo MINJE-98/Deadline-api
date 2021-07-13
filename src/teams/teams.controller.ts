@@ -6,7 +6,7 @@ import {
   Patch,
   Param,
   Delete,
-  Put,
+  UseGuards,
 } from '@nestjs/common';
 import {
   ApiOperation,
@@ -14,11 +14,19 @@ import {
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
+import { TokenCheck } from 'src/auth/token.check.guard';
+import { Token } from 'src/common/dto';
 import { Teamembers, Teams } from 'src/entities';
 import { TeamsService } from './teams.service';
 
+@UseGuards(TokenCheck)
 @ApiTags('Teams')
 @Controller('teams')
+@ApiResponse({
+  status: 404,
+  description: '유효한 토큰이 아닙니다.',
+  type: Token,
+})
 export class TeamsController {
   constructor(private readonly teamsService: TeamsService) {}
 
