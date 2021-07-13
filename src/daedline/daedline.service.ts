@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
-import { Deadline } from 'src/entities';
+import { Deadlines } from 'src/entities';
 
 @Injectable()
 export class DaedlineService {
-  createDeadline(createDaedlineDto: Deadline) {
+  createDeadline(createDaedlineDto: Deadlines) {
     return 'This action adds a new daedline';
   }
 
@@ -15,7 +15,7 @@ export class DaedlineService {
     return `This action returns a #${id} daedline`;
   }
 
-  updateDeadline(id: number, updateDaedlineDto: Deadline) {
+  updateDeadline(id: number, updateDaedlineDto: Deadlines) {
     return `This action updates a #${id} daedline`;
   }
 
