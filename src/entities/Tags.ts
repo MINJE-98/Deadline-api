@@ -8,7 +8,7 @@ import {
   OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { Deadline } from './Deadline';
+import { Deadlines } from './Deadlines';
 import { Teams } from './Teams';
 
 @Index('FK_Tags_teamid_teams_Teamid', ['teamid'], {})
@@ -56,8 +56,8 @@ export class Tags {
   @Column('datetime', { name: 'deleteAt', nullable: true, comment: '삭제일자' })
   deleteAt: Date | null;
 
-  @OneToMany(() => Deadline, deadline => deadline.tag)
-  deadlines: Deadline[];
+  @OneToMany(() => Deadlines, deadline => deadline.tag)
+  deadlines: Deadlines[];
 
   @ManyToOne(() => Teams, teams => teams.tags, {
     onDelete: 'CASCADE',

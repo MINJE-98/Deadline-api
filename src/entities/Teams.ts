@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
-import { Deadline } from './Deadline';
+import { Deadlines } from './Deadlines';
 import { Items } from './Items';
 import { Tags } from './Tags';
 import { Teamembers } from './Teamembers';
@@ -42,8 +42,8 @@ export class Teams {
   @Column('datetime', { name: 'deleteAt', nullable: true, comment: '삭제일자' })
   deleteAt: Date | null;
 
-  @OneToMany(() => Deadline, deadline => deadline.team)
-  deadlines: Deadline[];
+  @OneToMany(() => Deadlines, deadline => deadline.team)
+  deadlines: Deadlines[];
 
   @OneToMany(() => Items, items => items.team)
   items: Items[];

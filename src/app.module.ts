@@ -7,7 +7,7 @@ import { UsersModule } from './users/users.module';
 import { TeamsModule } from './teams/teams.module';
 import { ItemsModule } from './items/items.module';
 import { TagsModule } from './tags/tags.module';
-import { DaedlineModule } from './daedline/daedline.module';
+import { DaedlineModule } from './daedlines/daedline.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -22,7 +22,7 @@ import { DaedlineModule } from './daedline/daedline.module';
       username: process.env.DB_USERNAME,
       password: process.env.DB_PASSWORD,
       database: process.env.DB_DATABASE_NAME,
-      entities: [e.Deadline, e.Users, e.Teams, e.Teamembers, e.Tags, e.Items],
+      entities: [e.Deadlines, e.Users, e.Teams, e.Teamembers, e.Tags, e.Items],
       logging: true,
       synchronize: false, // false가 안전함
     }),

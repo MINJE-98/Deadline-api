@@ -8,7 +8,7 @@ import {
   OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { Deadline } from './Deadline';
+import { Deadlines } from './Deadlines';
 import { Teams } from './Teams';
 
 @Index('FK_Items_teamid_Teams_teamid', ['teamid'], {})
@@ -75,8 +75,8 @@ export class Items {
   @Column('datetime', { name: 'deleteAt', nullable: true, comment: '삭제일자' })
   deleteAt: Date | null;
 
-  @OneToMany(() => Deadline, deadline => deadline.item)
-  deadlines: Deadline[];
+  @OneToMany(() => Deadlines, deadline => deadline.item)
+  deadlines: Deadlines[];
 
   @ManyToOne(() => Teams, teams => teams.items, {
     onDelete: 'SET NULL',
