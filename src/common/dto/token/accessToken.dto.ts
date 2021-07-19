@@ -2,7 +2,7 @@ import { ApiProperty } from '@nestjs/swagger';
 
 export class AccessToken {
   @ApiProperty({
-    example: 'iH6kwgPnvJG8kW2JIdurxpCH-8RkML8EuA43UAo9dBEAAAF6nUG8qg',
+    example: '9drkNW-ZCtV0zgrRu9AW6ztIwXwqxrwwAYc7AAo9cxgAAAF6qHWUNg',
     description: 'accessToken',
   })
   accessToken: string;

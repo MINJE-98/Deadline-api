@@ -1,12 +1,15 @@
 import { ApiProperty } from '@nestjs/swagger';
 import {
   Column,
+  CreateDateColumn,
+  DeleteDateColumn,
   Entity,
   Index,
   JoinColumn,
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
+  UpdateDateColumn,
 } from 'typeorm';
 import { Deadlines } from './Deadlines';
 import { Teams } from './Teams';
@@ -39,22 +42,22 @@ export class Tags {
     example: '2021-07-09:15:31:32',
     description: '테그 생성일자',
   })
-  @Column('datetime', { name: 'createAt', comment: '생성일자' })
-  createAt: Date;
+  @CreateDateColumn({ comment: '테그 생성일자' })
+  createdAt: Date;
 
   @ApiProperty({
     example: '2021-07-09:15:31:32',
     description: '테그 수정일자',
   })
-  @Column('datetime', { name: 'updateAt', comment: '수정일자' })
-  updateAt: Date;
+  @UpdateDateColumn({ comment: '테그 수정일자' })
+  updatedAt: Date;
 
   @ApiProperty({
     example: '2021-07-09:15:31:32',
     description: '테그 삭제일자',
   })
-  @Column('datetime', { name: 'deleteAt', nullable: true, comment: '삭제일자' })
-  deleteAt: Date | null;
+  @DeleteDateColumn({ comment: '테그 삭제일자' })
+  deletedAt: Date | null;
 
   @OneToMany(() => Deadlines, deadline => deadline.tag)
   deadlines: Deadlines[];

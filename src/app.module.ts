@@ -22,7 +22,7 @@ import { DaedlineModule } from './daedlines/daedline.module';
       username: process.env.DB_USERNAME,
       password: process.env.DB_PASSWORD,
       database: process.env.DB_DATABASE_NAME,
-      entities: [e.Deadlines, e.Users, e.Teams, e.Teamembers, e.Tags, e.Items],
+      entities: [e.Deadlines, e.Users, e.Teams, e.TeamMembers, e.Tags, e.Items],
       logging: true,
       synchronize: false, // false가 안전함
     }),

@@ -1,6 +1,14 @@
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  CreateDateColumn,
+  DeleteDateColumn,
+  Entity,
+  OneToMany,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from 'typeorm';
 import { ApiProperty } from '@nestjs/swagger';
-import { Teamembers } from './Teamembers';
+import { TeamMembers } from './TeamMembers';
 
 @Entity('Users', { schema: 'Deadline' })
 export class Users {
@@ -54,23 +62,23 @@ export class Users {
     example: '2021-07-09:15:31:32',
     description: '유저 생성일자',
   })
-  @Column('datetime', { name: 'createAt', comment: '생성일자' })
-  createAt: Date;
+  @CreateDateColumn({ comment: '유저 생성일자' })
+  createdAt: Date;
 
   @ApiProperty({
     example: '2021-07-09:15:31:32',
     description: '유저 수정일자',
   })
-  @Column('datetime', { name: 'updateAt', comment: '수정일자' })
-  updateAt: Date;
+  @UpdateDateColumn({ comment: '유저 수정일자' })
+  updatedAt: Date;
 
   @ApiProperty({
     example: '2021-07-10:01:01:32',
     description: '유저 삭제일자',
   })
-  @Column('datetime', { name: 'deleteAt', nullable: true, comment: '삭제일자' })
-  deleteAt: Date | null;
+  @DeleteDateColumn({ comment: '유저 삭제일자' })
+  deletedAt: Date | null;
 
-  @OneToMany(() => Teamembers, teamembers => teamembers.user)
-  teamembers: Teamembers[];
+  @OneToMany(() => TeamMembers, teamMembers => teamMembers.user)
+  teamMembers: TeamMembers[];
 }

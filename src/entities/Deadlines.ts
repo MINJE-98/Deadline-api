@@ -1,11 +1,14 @@
 import { ApiProperty } from '@nestjs/swagger';
 import {
   Column,
+  CreateDateColumn,
+  DeleteDateColumn,
   Entity,
   Index,
   JoinColumn,
   ManyToOne,
   PrimaryGeneratedColumn,
+  UpdateDateColumn,
 } from 'typeorm';
 import { Items } from './Items';
 import { Tags } from './Tags';
@@ -59,22 +62,22 @@ export class Deadlines {
     example: '2021-07-09:15:31:32',
     description: '유통기한 생성일자',
   })
-  @Column('datetime', { name: 'createAt', comment: '생성일자' })
-  createAt: Date;
+  @CreateDateColumn({ comment: '유통기한 생성일자' })
+  createdAt: Date;
 
   @ApiProperty({
     example: '2021-07-09:15:31:32',
     description: '유통기한 수정일자',
   })
-  @Column('datetime', { name: 'updateAt', comment: '수정일자' })
-  updateAt: Date;
+  @UpdateDateColumn({ comment: '유통기한 수정일자' })
+  updatedAt: Date;
 
   @ApiProperty({
     example: '2021-07-10:15:31:32',
     description: '유통기한 삭제일자',
   })
-  @Column('datetime', { name: 'deleteAt', nullable: true, comment: '삭제일자' })
-  deleteAt: Date | null;
+  @DeleteDateColumn({ comment: '유통기한 삭제일자' })
+  deletedAt: Date | null;
 
   @ManyToOne(() => Items, items => items.deadlines, {
     onDelete: 'SET NULL',

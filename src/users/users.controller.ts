@@ -10,34 +10,34 @@ import {
   Query,
   Body,
 } from '@nestjs/common';
-import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiHeader, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { TokenCheck } from 'src/auth/token.check.guard';
-import { User } from 'src/common/decorator/user.decorator';
-import { Token } from 'src/common/dto';
-import { AccessToken, SocialId } from '../common/dto';
+import { UserInfo } from 'src/common/decorator';
+import { TokenAuthError } from 'src/common/dto';
+import { AccessToken } from '../common/dto';
 import { Users } from '../entities/Users';
 import { UsersService } from './users.service';
 
 @UseGuards(TokenCheck)
 @ApiTags('Users')
+@ApiHeader({
+  name: 'accesstoken',
+  required: true,
+  description: '토큰',
+})
 @ApiResponse({
   status: 404,
   description: '유효한 토큰이 아닙니다.',
-  type: Token,
+  type: TokenAuthError,
 })
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
-  /**
-   * TODO
-   *   CRUD
-   *
-   */
   @Post()
   @ApiOperation({ summary: '유저 생성', description: '유저를 생성합니다.' })
   @ApiResponse({ status: 201, description: '유저 생성 성공', type: Users })
-  createUser(@Headers() AccessToken: AccessToken, @User() userinfo: Users) {
+  createUser(@Headers('accesstoken') AccessToken, @UserInfo() userinfo: Users) {
     return this.usersService.createUser(userinfo);
   }
 
@@ -45,7 +45,7 @@ export class UsersController {
   @ApiOperation({ summary: '유저 조회', description: '유저를 조회합니다.' })
   @ApiResponse({ status: 200, description: '성공', type: Users })
   findUser(
-    @Headers() AccessToken: AccessToken,
+    @Headers('accesstoken') AccessToken,
     @Param('socialId') socialId: number,
   ) {
     return this.usersService.findUser(socialId);
@@ -66,7 +66,7 @@ export class UsersController {
   @ApiOperation({ summary: '유저 삭제', description: '유저를 삭제합니다.' })
   @ApiResponse({ status: 200, description: '성공', type: Users })
   removeUser(
-    @Headers() AccessToken: AccessToken,
+    @Headers('accesstoken') AccessToken,
     @Param('socialId') socialId: number,
   ) {
     return this.usersService.removeUser(socialId);

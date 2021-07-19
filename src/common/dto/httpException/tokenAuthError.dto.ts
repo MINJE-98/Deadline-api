@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 
-export class Token {
+export class TokenAuthError {
   @ApiProperty({
     example: '404',
     description: '에러 코드',

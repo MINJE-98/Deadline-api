@@ -1,9 +1,17 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  CreateDateColumn,
+  DeleteDateColumn,
+  Entity,
+  OneToMany,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from 'typeorm';
 import { Deadlines } from './Deadlines';
 import { Items } from './Items';
 import { Tags } from './Tags';
-import { Teamembers } from './Teamembers';
+import { TeamMembers } from './TeamMembers';
 
 @Entity('Teams', { schema: 'Deadline' })
 export class Teams {
@@ -25,22 +33,22 @@ export class Teams {
     example: '2021-07-09:15:31:32',
     description: '팀 생성일자',
   })
-  @Column('datetime', { name: 'createAt', comment: '생성일자' })
-  createAt: Date;
+  @CreateDateColumn({ comment: '팀 생성일자' })
+  createdAt: Date;
 
   @ApiProperty({
     example: '2021-07-09:15:31:32',
     description: '팀 수정일자',
   })
-  @Column('datetime', { name: 'updateAt', comment: '수정일자' })
-  updateAt: Date;
+  @UpdateDateColumn({ comment: '팀 수정일자' })
+  updatedAt: Date;
 
   @ApiProperty({
     example: '2021-07-10:15:31:32',
     description: '팀 삭제일자',
   })
-  @Column('datetime', { name: 'deleteAt', nullable: true, comment: '삭제일자' })
-  deleteAt: Date | null;
+  @DeleteDateColumn({ comment: '팀 삭제일자' })
+  deletedAt: Date | null;
 
   @OneToMany(() => Deadlines, deadline => deadline.team)
   deadlines: Deadlines[];
@@ -51,6 +59,6 @@ export class Teams {
   @OneToMany(() => Tags, tags => tags.team)
   tags: Tags[];
 
-  @OneToMany(() => Teamembers, teamembers => teamembers.team)
-  teamembers: Teamembers[];
+  @OneToMany(() => TeamMembers, teamMembers => teamMembers.team)
+  teamMembers: TeamMembers[];
 }
