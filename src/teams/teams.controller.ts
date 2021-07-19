@@ -7,94 +7,150 @@ import {
   Param,
   Delete,
   UseGuards,
+  Headers,
+  Query,
 } from '@nestjs/common';
-import {
-  ApiOperation,
-  ApiProperty,
-  ApiResponse,
-  ApiTags,
-} from '@nestjs/swagger';
+import { ApiHeader, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { TokenCheck } from 'src/auth/token.check.guard';
-import { Token } from 'src/common/dto';
-import { Teamembers, Teams } from 'src/entities';
+import { TokenAuthError, TeamName } from '../common/dto';
+import { UserInfo } from 'src/common/decorator';
+import { TeamMembers, Teams, Users } from 'src/entities';
 import { TeamsService } from './teams.service';
 
 @UseGuards(TokenCheck)
 @ApiTags('Teams')
-@Controller('teams')
+@ApiHeader({
+  name: 'accesstoken',
+  required: true,
+  description: '토큰',
+})
 @ApiResponse({
   status: 404,
   description: '유효한 토큰이 아닙니다.',
-  type: Token,
+  type: TokenAuthError,
 })
+@Controller('teams')
 export class TeamsController {
   constructor(private readonly teamsService: TeamsService) {}
 
-  @Post()
+  @Post(':teamname')
   @ApiOperation({ summary: '팀 생성', description: '팀을 생성합니다.' })
   @ApiResponse({ status: 200, description: '성공', type: Teams })
-  createTeam(@Body() createTeamDto: Teams) {
-    return this.teamsService.createTeam(createTeamDto);
+  createTeam(
+    @Headers('accessToken') AccessToken,
+    @UserInfo() userinfo,
+    @Param('teamname') teamname: string,
+  ) {
+    return this.teamsService.createTeam(userinfo, teamname);
   }
 
-  @Get(':teamId')
-  @ApiOperation({ summary: '팀 조회', description: '팀을 조회합니다.' })
+  @Get('teamname/:teamname')
+  @ApiOperation({
+    summary: '팀명으로 팀을 조회',
+    description: '팀명으로 팀을 조회합니다.',
+  })
   @ApiResponse({ status: 200, description: '성공', type: Teams })
-  findTeam(@Param('teamId') teamId: string) {
-    return this.teamsService.findTeam(+teamId);
+  findTeamFromName(
+    @Headers('accessToken') AccessToken,
+    @Param('teamname') teamname: string,
+  ) {
+    return this.teamsService.findTeamFromName(teamname);
   }
 
-  @Patch(':teamId')
-  @ApiOperation({ summary: '팀 수정', description: '팀을 수정합니다.' })
+  @Get('teamid/:teamid')
+  @ApiOperation({
+    summary: '팀아이디로 팀 조회',
+    description: '팀아이디로 팀을 조회합니다.',
+  })
   @ApiResponse({ status: 200, description: '성공', type: Teams })
-  updateTeam(@Param('teamId') teamId: string, @Body() updateTeamDto: Teams) {
-    return this.teamsService.updateTeam(+teamId, updateTeamDto);
+  findTeamFromId(
+    @Headers('accessToken') AccessToken,
+    @Param('teamid') teamid: number,
+  ) {
+    return this.teamsService.findTeamFromId(teamid);
   }
 
-  @Delete(':teamId')
+  @Patch(':teamid')
+  @ApiOperation({
+    summary: '팀 정보 수정',
+    description: '팀의 정보를 수정합니다.',
+  })
+  @ApiResponse({ status: 200, description: '성공', type: Teams })
+  updateTeam(
+    @Headers('accessToken') AccessToken,
+    @Param('teamid') teamid: number,
+    @Query('teamname') teamname: string,
+    @UserInfo() userinfo: Users,
+  ) {
+    return this.teamsService.updateTeam(teamid, teamname, userinfo);
+  }
+
+  @Delete(':teamid')
   @ApiOperation({ summary: '팀 삭제', description: '팀을 삭제합니다.' })
   @ApiResponse({ status: 200, description: '성공', type: Teams })
-  removeTeam(@Param('id') id: string) {
-    return this.teamsService.removeTeam(+id);
+  removeTeam(
+    @Headers('accessToken') AccessToken,
+    @Param('teamid') teamid: number,
+    @UserInfo() userinfo: Users,
+  ) {
+    return this.teamsService.removeTeam(teamid, userinfo);
   }
 
-  @Post(':teamId/user')
+  @Post(':teamid/teamMembers')
   @ApiOperation({
     summary: '팀에 유저 초대',
     description: '팀에 유저 초대합니다.',
   })
-  @ApiResponse({ status: 200, description: '성공', type: Teamembers })
-  createTeamMembers(@Body('email') email: string) {
-    return this.teamsService.createTeamMembers(email);
+  @ApiResponse({ status: 200, description: '성공', type: TeamMembers })
+  createTeamMembers(
+    @Headers('accessToken') AccessToken,
+    @Param('teamid') teamid: number,
+    @Query('email') email: string,
+    @UserInfo() userinfo: Users,
+  ) {
+    return this.teamsService.createTeamMembers(teamid, email, userinfo);
   }
 
-  @Get(':teamId/user')
+  @Get(':teamid/teamMembers')
   @ApiOperation({
-    summary: '팀에 가입된 유저 조회',
-    description: '팀에 가입된 모든 유저를 조회합니다.',
+    summary: '팀에 가입된 전체 유저 조회',
+    description: '팀에 가입된 전체 유저를 조회합니다.',
   })
-  @ApiResponse({ status: 200, description: '성공', type: Teamembers })
-  getTeamMembers(@Param('teamid') param: string) {
-    return this.teamsService.getTeamMembers(param);
+  @ApiResponse({ status: 200, description: '성공', type: TeamMembers })
+  getWholeTeamMembers(
+    @Headers('accessToken') AccessToken,
+    @Param('teamid') teamid: number,
+  ) {
+    return this.teamsService.getWholeTeamMembers(teamid);
   }
 
-  @Patch(':teamId/user')
+  @Patch(':teamid/teamMembers')
   @ApiOperation({
     summary: '팀에 가입한 유저 수정',
     description: '팀에 가입된 유저 정보 상태 변경합니다.',
   })
-  @ApiResponse({ status: 200, description: '성공', type: Teamembers })
-  updateTeamMembersState(@Body('email') email: string) {
-    return this.teamsService.updateTeamMembersState(email);
+  @ApiResponse({ status: 200, description: '성공', type: TeamMembers })
+  updateTeamMembers(
+    @Headers('accessToken') AccessToken,
+    @Param('teamid') teamid: number,
+    @Query('state') state: number,
+    @Query('userid') userid: number,
+    @UserInfo() userinfo: Users,
+  ) {
+    return this.teamsService.updateTeamMembers(teamid, userid, state, userinfo);
   }
 
-  @Delete(':teamId/user')
+  @Delete(':teamid/users')
   @ApiOperation({
     summary: '팀 탈퇴',
     description: '유저가 팀에서 탈퇴합니다.',
   })
-  @ApiResponse({ status: 200, description: '성공', type: Teamembers })
-  deleteTeamMembersState(@Body('email') email: string) {
-    return this.teamsService.deleteTeamMembersState(email);
+  @ApiResponse({ status: 200, description: '성공', type: TeamMembers })
+  deleteTeamMembers(
+    @Headers('accessToken') AccessToken,
+    @Param('teamid') teamid: number,
+    @UserInfo('userinfo') userinfo: Users,
+  ) {
+    return this.teamsService.deleteTeamMembers(teamid, userinfo);
   }
 }
