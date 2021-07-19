@@ -9,56 +9,37 @@ export class UsersService {
     @InjectRepository(Users) private usersRepository: Repository<Users>,
   ) {}
   async createUser(userinfo: Users) {
-    try {
-      const user = await this.usersRepository.findOne({
-        where: [userinfo.socialId],
-        select: ['id'],
-      });
+    const user = await this.usersRepository.findOne({
+      where: [userinfo.socialId],
+      select: ['id'],
+    });
 
-      if (!user) {
-        return await this.usersRepository.save(userinfo);
-      } else {
-        throw new HttpException(
-          {
-            status: HttpStatus.NOT_FOUND,
-            error: '이미 존재하는 유저입니다.',
-          },
-          HttpStatus.NOT_FOUND,
-        );
-      }
-    } catch (error) {
-      console.log(error);
-      return error;
+    if (!user) {
+      return await this.usersRepository.save(userinfo);
+    } else {
+      throw new HttpException(
+        {
+          status: HttpStatus.NOT_FOUND,
+          error: '이미 존재하는 유저입니다.',
+        },
+        HttpStatus.NOT_FOUND,
+      );
     }
   }
 
   async findUser(socialId: number) {
-    try {
-      const user = await this.usersRepository.findOne({
-        where: { socialId },
-        select: [
-          'id',
-          'socialId',
-          'name',
-          'profileUrl',
-          'email',
-          'createAt',
-          'updateAt',
-          'deleteAt',
-        ],
-      });
-      if (!user) {
-        throw new HttpException(
-          {
-            status: HttpStatus.NOT_FOUND,
-            error: '존재하지않는 유저입니다.',
-          },
-          HttpStatus.NOT_FOUND,
-        );
-      } else return user;
-    } catch (error) {
-      return error;
-    }
+    const user = await this.usersRepository.findOne({
+      where: { socialId },
+    });
+    if (!user) {
+      throw new HttpException(
+        {
+          status: HttpStatus.NOT_FOUND,
+          error: '해당 유저는 존재하지 않습니다.',
+        },
+        HttpStatus.NOT_FOUND,
+      );
+    } else return user;
   }
 
   // async updateUser(socialId: number) {
@@ -71,34 +52,30 @@ export class UsersService {
   // }
 
   async removeUser(socialId: number) {
-    try {
-      console.log(socialId);
+    console.log(socialId);
 
-      const user = await this.usersRepository.findOne({
-        where: { socialId },
-        select: ['id'],
-      });
+    const user = await this.usersRepository.findOne({
+      where: { socialId },
+      select: ['id'],
+    });
 
-      if (!user) {
-        throw new HttpException(
-          {
-            status: HttpStatus.NOT_FOUND,
-            error: '존재하지않는 유저입니다.',
-          },
-          HttpStatus.NOT_FOUND,
-        );
-      } else {
-        const result = await this.usersRepository.delete(user);
-        throw new HttpException(
-          {
-            status: HttpStatus.OK,
-            error: '유저 삭제 성공',
-          },
-          HttpStatus.OK,
-        );
-      }
-    } catch (error) {
-      return error;
+    if (!user) {
+      throw new HttpException(
+        {
+          status: HttpStatus.NOT_FOUND,
+          error: '존재하지않는 유저입니다.',
+        },
+        HttpStatus.NOT_FOUND,
+      );
+    } else {
+      await this.usersRepository.remove(user);
+      throw new HttpException(
+        {
+          status: HttpStatus.OK,
+          error: '유저 삭제 성공',
+        },
+        HttpStatus.OK,
+      );
     }
   }
 }
