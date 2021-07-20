@@ -1,9 +1,9 @@
 import { ApiProperty } from '@nestjs/swagger';
 
-export class TeamState {
+export class TeamMembersUpdate {
   @ApiProperty({
     example: '0',
     description: '팀 상태',
   })
-  state: string;
+  state: number;
 }

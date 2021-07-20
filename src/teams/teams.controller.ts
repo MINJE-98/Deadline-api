@@ -10,9 +10,15 @@ import {
   Headers,
   Query,
 } from '@nestjs/common';
-import { ApiHeader, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBody,
+  ApiHeader,
+  ApiOperation,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 import { TokenCheck } from 'src/auth/token.check.guard';
-import { TokenAuthError, TeamName } from '../common/dto';
+import { TokenAuthError, TeamsUpdate, TeamMembersUpdate } from '../common/dto';
 import { UserInfo } from 'src/common/decorator';
 import { TeamMembers, Teams, Users } from 'src/entities';
 import { TeamsService } from './teams.service';
@@ -75,13 +81,18 @@ export class TeamsController {
     summary: '팀 정보 수정',
     description: '팀의 정보를 수정합니다.',
   })
+  @ApiBody({
+    required: true,
+    type: TeamsUpdate,
+  })
   @ApiResponse({ status: 200, description: '성공', type: Teams })
   updateTeam(
     @Headers('accessToken') AccessToken,
     @Param('teamid') teamid: number,
-    @Query('teamname') teamname: string,
+    @Body() body,
     @UserInfo() userinfo: Users,
   ) {
+    const { teamname } = body;
     return this.teamsService.updateTeam(teamid, teamname, userinfo);
   }
 
@@ -96,7 +107,7 @@ export class TeamsController {
     return this.teamsService.removeTeam(teamid, userinfo);
   }
 
-  @Post(':teamid/teamMembers')
+  @Post(':teamid/teamMember')
   @ApiOperation({
     summary: '팀에 유저 초대',
     description: '팀에 유저 초대합니다.',
@@ -129,14 +140,19 @@ export class TeamsController {
     summary: '팀에 가입한 유저 수정',
     description: '팀에 가입된 유저 정보 상태 변경합니다.',
   })
+  @ApiBody({
+    required: true,
+    type: TeamMembersUpdate,
+  })
   @ApiResponse({ status: 200, description: '성공', type: TeamMembers })
   updateTeamMembers(
     @Headers('accessToken') AccessToken,
     @Param('teamid') teamid: number,
-    @Query('state') state: number,
     @Query('userid') userid: number,
+    @Body() body,
     @UserInfo() userinfo: Users,
   ) {
+    const { state } = body;
     return this.teamsService.updateTeamMembers(teamid, userid, state, userinfo);
   }
 
