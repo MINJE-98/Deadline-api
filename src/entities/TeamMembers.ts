@@ -26,9 +26,9 @@ export class TeamMembers {
 
   @ApiProperty({
     example: '1',
-    description: '유저 UID',
+    description: '유저 ID',
   })
-  @Column('int', { name: 'userid', comment: '유저UID(FK)' })
+  @Column('int', { name: 'userid', comment: '유저ID(FK)' })
   userid: number;
 
   @ApiProperty({
@@ -77,6 +77,6 @@ export class TeamMembers {
     onDelete: 'CASCADE',
     onUpdate: 'CASCADE',
   })
-  @JoinColumn([{ name: 'userid', referencedColumnName: 'id' }])
+  @JoinColumn([{ name: 'usersid', referencedColumnName: 'id' }])
   user: Users;
 }

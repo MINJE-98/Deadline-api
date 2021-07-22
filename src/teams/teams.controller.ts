@@ -14,14 +14,16 @@ import {
   ApiBody,
   ApiHeader,
   ApiOperation,
+  ApiQuery,
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
 import { TokenCheck } from 'src/auth/token.check.guard';
-import { TokenAuthError, TeamsUpdate, TeamMembersUpdate } from '../common/dto';
+import { TokenAuthError } from '../common/dto';
 import { UserInfo } from 'src/common/decorator';
 import { TeamMembers, Teams, Users } from 'src/entities';
 import { TeamsService } from './teams.service';
+import { TeamsUpdate } from './dto/teamsUpdate.dto';
 
 @UseGuards(TokenCheck)
 @ApiTags('Teams')
@@ -39,44 +41,39 @@ import { TeamsService } from './teams.service';
 export class TeamsController {
   constructor(private readonly teamsService: TeamsService) {}
 
-  @Post(':teamname')
   @ApiOperation({ summary: '팀 생성', description: '팀을 생성합니다.' })
   @ApiResponse({ status: 200, description: '성공', type: Teams })
+  @Post(':teamname')
   createTeam(
     @Headers('accessToken') AccessToken,
-    @UserInfo() userinfo,
+    @UserInfo('id') id: number,
     @Param('teamname') teamname: string,
   ) {
-    return this.teamsService.createTeam(userinfo, teamname);
+    return this.teamsService.createTeam(id, teamname);
   }
 
-  @Get('teamname/:teamname')
   @ApiOperation({
-    summary: '팀명으로 팀을 조회',
-    description: '팀명으로 팀을 조회합니다.',
+    summary: '팀을 조회',
+    description: '팀을 조회합니다.',
+  })
+  @ApiQuery({
+    required: false,
+    name: 'teamname',
+  })
+  @ApiQuery({
+    required: false,
+    name: 'teamid',
   })
   @ApiResponse({ status: 200, description: '성공', type: Teams })
-  findTeamFromName(
+  @Get()
+  findTeam(
     @Headers('accessToken') AccessToken,
-    @Param('teamname') teamname: string,
+    @Query('teamname') teamname: string,
+    @Query('teamid') teamid: number,
   ) {
-    return this.teamsService.findTeamFromName(teamname);
+    return this.teamsService.findTeam(teamname, teamid);
   }
 
-  @Get('teamid/:teamid')
-  @ApiOperation({
-    summary: '팀아이디로 팀 조회',
-    description: '팀아이디로 팀을 조회합니다.',
-  })
-  @ApiResponse({ status: 200, description: '성공', type: Teams })
-  findTeamFromId(
-    @Headers('accessToken') AccessToken,
-    @Param('teamid') teamid: number,
-  ) {
-    return this.teamsService.findTeamFromId(teamid);
-  }
-
-  @Patch(':teamid')
   @ApiOperation({
     summary: '팀 정보 수정',
     description: '팀의 정보를 수정합니다.',
@@ -86,87 +83,24 @@ export class TeamsController {
     type: TeamsUpdate,
   })
   @ApiResponse({ status: 200, description: '성공', type: Teams })
+  @Patch(':teamid')
   updateTeam(
     @Headers('accessToken') AccessToken,
     @Param('teamid') teamid: number,
-    @Body() body,
-    @UserInfo() userinfo: Users,
+    @Body('teamname') teamname: string,
+    @UserInfo('id') id: number,
   ) {
-    const { teamname } = body;
-    return this.teamsService.updateTeam(teamid, teamname, userinfo);
+    return this.teamsService.updateTeam(teamid, teamname, id);
   }
 
-  @Delete(':teamid')
   @ApiOperation({ summary: '팀 삭제', description: '팀을 삭제합니다.' })
   @ApiResponse({ status: 200, description: '성공', type: Teams })
+  @Delete(':teamid')
   removeTeam(
     @Headers('accessToken') AccessToken,
     @Param('teamid') teamid: number,
-    @UserInfo() userinfo: Users,
+    @UserInfo('id') id: number,
   ) {
-    return this.teamsService.removeTeam(teamid, userinfo);
-  }
-
-  @Post(':teamid/teamMember')
-  @ApiOperation({
-    summary: '팀에 유저 초대',
-    description: '팀에 유저 초대합니다.',
-  })
-  @ApiResponse({ status: 200, description: '성공', type: TeamMembers })
-  createTeamMembers(
-    @Headers('accessToken') AccessToken,
-    @Param('teamid') teamid: number,
-    @Query('email') email: string,
-    @UserInfo() userinfo: Users,
-  ) {
-    return this.teamsService.createTeamMembers(teamid, email, userinfo);
-  }
-
-  @Get(':teamid/teamMembers')
-  @ApiOperation({
-    summary: '팀에 가입된 전체 유저 조회',
-    description: '팀에 가입된 전체 유저를 조회합니다.',
-  })
-  @ApiResponse({ status: 200, description: '성공', type: TeamMembers })
-  getWholeTeamMembers(
-    @Headers('accessToken') AccessToken,
-    @Param('teamid') teamid: number,
-  ) {
-    return this.teamsService.getWholeTeamMembers(teamid);
-  }
-
-  @Patch(':teamid/teamMembers')
-  @ApiOperation({
-    summary: '팀에 가입한 유저 수정',
-    description: '팀에 가입된 유저 정보 상태 변경합니다.',
-  })
-  @ApiBody({
-    required: true,
-    type: TeamMembersUpdate,
-  })
-  @ApiResponse({ status: 200, description: '성공', type: TeamMembers })
-  updateTeamMembers(
-    @Headers('accessToken') AccessToken,
-    @Param('teamid') teamid: number,
-    @Query('userid') userid: number,
-    @Body() body,
-    @UserInfo() userinfo: Users,
-  ) {
-    const { state } = body;
-    return this.teamsService.updateTeamMembers(teamid, userid, state, userinfo);
-  }
-
-  @Delete(':teamid/users')
-  @ApiOperation({
-    summary: '팀 탈퇴',
-    description: '유저가 팀에서 탈퇴합니다.',
-  })
-  @ApiResponse({ status: 200, description: '성공', type: TeamMembers })
-  deleteTeamMembers(
-    @Headers('accessToken') AccessToken,
-    @Param('teamid') teamid: number,
-    @UserInfo('userinfo') userinfo: Users,
-  ) {
-    return this.teamsService.deleteTeamMembers(teamid, userinfo);
+    return this.teamsService.removeTeam(teamid, id);
   }
 }

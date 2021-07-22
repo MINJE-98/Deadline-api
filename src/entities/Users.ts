@@ -4,6 +4,7 @@ import {
   DeleteDateColumn,
   Entity,
   OneToMany,
+  PrimaryColumn,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -13,18 +14,11 @@ import { TeamMembers } from './TeamMembers';
 @Entity('Users', { schema: 'Deadline' })
 export class Users {
   @ApiProperty({
-    example: '1',
-    description: '유저 아이디',
-  })
-  @PrimaryGeneratedColumn({ type: 'int', name: 'id', comment: 'ID' })
-  id: number;
-
-  @ApiProperty({
     example: '1804030582',
-    description: '소셜 UID',
+    description: 'id',
   })
-  @Column('varchar', { name: 'socialId', comment: '소셜 id', length: 255 })
-  socialId: number;
+  @PrimaryColumn({ type: 'int', name: 'id', comment: '유저 ID' })
+  id: number;
 
   @ApiProperty({
     example: 'minje9801@gmail.com',

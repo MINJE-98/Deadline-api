@@ -41,15 +41,15 @@ export class TagsController {
   constructor(private readonly tagsService: TagsService) {}
 
   @Post('/:teamid/tags/:tagname')
-  @ApiOperation({ summary: '테그 생성', description: '테그을 생성합니다.' })
+  @ApiOperation({ summary: '테그 생성', description: '테그를 생성합니다.' })
   @ApiResponse({ status: 200, description: '성공', type: Tags })
   createTags(
     @Headers('accessToken') AccessToken,
-    @UserInfo() userinfo,
+    @UserInfo('id') id,
     @Param('teamid') teamid: number,
     @Param('tagname') tagname: string,
   ) {
-    return this.tagsService.createTags(userinfo, teamid, tagname);
+    return this.tagsService.createTags(id, teamid, tagname);
   }
 
   @Get('/:teamid/tags')
@@ -68,12 +68,12 @@ export class TagsController {
   @ApiResponse({ status: 200, description: '성공', type: Tags })
   findTags(
     @Headers('accessToken') AccessToken,
-    @UserInfo() userinfo,
+    @UserInfo('id') id,
     @Param('teamid') teamid: number,
     @Query('tagid') tagid: number,
     @Query('tagname') tagname: string,
   ) {
-    return this.tagsService.findTags(userinfo, teamid, tagid, tagname);
+    return this.tagsService.findTags(id, teamid, tagid, tagname);
   }
 
   @Patch('/:teamid/tags/:tagid')
@@ -88,12 +88,12 @@ export class TagsController {
   @ApiResponse({ status: 200, description: '성공', type: Tags })
   updateTag(
     @Headers('accessToken') AccessToken,
-    @UserInfo() userinfo,
+    @UserInfo('id') id,
     @Param('teamid') teamid: number,
     @Param('tagid') tagid: number,
     @Body('name') tagname,
   ) {
-    return this.tagsService.updateTag(userinfo, teamid, tagid, tagname);
+    return this.tagsService.updateTag(id, teamid, tagid, tagname);
   }
 
   @Delete('/:teamid/tags/:tagid')
@@ -104,10 +104,10 @@ export class TagsController {
   @ApiResponse({ status: 200, description: '성공', type: Tags })
   removeTags(
     @Headers('accessToken') AccessToken,
-    @UserInfo() userinfo,
+    @UserInfo('id') id,
     @Param('teamid') teamid: number,
     @Param('tagid') tagid: number,
   ) {
-    return this.tagsService.removeTags(userinfo, teamid, tagid);
+    return this.tagsService.removeTags(id, teamid, tagid);
   }
 }

@@ -14,42 +14,41 @@ import { Repository } from 'typeorm';
 // 토큰을 검증합니다.
 @Injectable()
 export class TokenCheck implements CanActivate {
-  constructor(
-    @InjectRepository(Users) private usersRepository: Repository<Users>,
-  ) {}
+  constructor() {}
   async canActivate(context: ExecutionContext): Promise<boolean> {
     try {
       const request = context.switchToHttp().getRequest();
       const { accesstoken } = request.headers;
-      const now = new Date();
-      const { data } = await axios.get('https://kapi.kakao.com/v2/user/me', {
+      // accesstoken 검증
+      const accessTokenInfo = await axios.get(
+        'https://kapi.kakao.com/v1/user/access_token_info',
+        {
+          headers: {
+            Authorization: `Bearer ${accesstoken}`,
+          },
+        },
+      );
+      if (+process.env.KAKAO_APPID != accessTokenInfo.data.appId) {
+        throw new Error();
+      }
+      const userinfo = await axios.get('https://kapi.kakao.com/v2/user/me', {
         headers: {
           Authorization: `Bearer ${accesstoken}`,
         },
       });
-      const savedUserinfo = await this.usersRepository.findOne({
-        socialId: data.id,
-      });
-      if (!savedUserinfo) {
-        const sortedData = {
-          socialId: data.id,
-          name: data.kakao_account.profile.nickname,
-          profileUrl: data.kakao_account.profile.profile_image_url,
-          email: data.kakao_account.email,
-          createAt: now,
-          updateAt: now,
-          deleteAt: null,
-        };
-        request.headers = sortedData;
-        return true;
-      }
-      request.headers = savedUserinfo;
+      const sortedData = {
+        id: userinfo.data.id,
+        name: userinfo.data.kakao_account.profile.nickname,
+        profileUrl: userinfo.data.kakao_account.profile.profile_image_url,
+        email: userinfo.data.kakao_account.email,
+      };
+      request.headers = sortedData;
       return true;
     } catch (error) {
       throw new HttpException(
         {
           status: HttpStatus.NOT_FOUND,
-          error: '유효하지 않는 토큰입니다.',
+          massage: '유효하지 않는 토큰입니다.',
         },
         HttpStatus.NOT_FOUND,
       );

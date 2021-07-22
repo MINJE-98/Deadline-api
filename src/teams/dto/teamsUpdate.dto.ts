@@ -2,8 +2,8 @@ import { ApiProperty } from '@nestjs/swagger';
 
 export class TeamsUpdate {
   @ApiProperty({
-    example: '팀명',
-    description: '팀명',
+    example: '가톨릭 요양병원',
+    description: '팀 이름',
   })
   teamname: string;
 }

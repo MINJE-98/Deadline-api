@@ -11,14 +11,14 @@ export class TagsService {
     @InjectRepository(Users) private usersRepository: Repository<Users>,
     @InjectRepository(Tags) private tagsRepository: Repository<Tags>,
   ) {}
-  async createTags(userinfo: Users, teamid: number, tagname: string) {
+  async createTags(id: number, teamid: number, tagname: string) {
     // 팀에 가입되어있는지?
-    const isjoined = await this.teamMembersRepository.findOne({
-      userid: userinfo.id,
+    const isJoined = await this.teamMembersRepository.findOne({
+      userid: id,
       teamid: teamid,
     });
     // no
-    if (isjoined == undefined) {
+    if (isJoined == undefined) {
       throw new HttpException(
         {
           status: HttpStatus.NOT_FOUND,
@@ -29,7 +29,7 @@ export class TagsService {
     }
     // yes but.
     // 테그를 추가할 권한이 있는지?
-    if (isjoined.state) {
+    if (isJoined.state != 0) {
       throw new HttpException(
         {
           status: HttpStatus.NOT_FOUND,
@@ -47,19 +47,14 @@ export class TagsService {
     return await this.tagsRepository.save(tags);
   }
 
-  async findTags(
-    userinfo: Users,
-    teamid: number,
-    tagid: number,
-    tagname: string,
-  ) {
+  async findTags(id: number, teamid: number, tagid: number, tagname: string) {
     // 팀에 가입되어있는지?
-    const isjoined = await this.teamMembersRepository.findOne({
-      userid: userinfo.id,
+    const isJoined = await this.teamMembersRepository.findOne({
+      userid: id,
       teamid: teamid,
     });
     // no
-    if (isjoined == undefined) {
+    if (isJoined == undefined) {
       throw new HttpException(
         {
           status: HttpStatus.NOT_FOUND,
@@ -69,13 +64,13 @@ export class TagsService {
       );
     }
     // 테그 아이디로 검색
-    if (!!tagid)
+    if (tagid != undefined)
       return await this.tagsRepository.findOne({
         id: tagid,
       });
     // 테그 명으로 검색
-    if (!!tagname)
-      return await this.tagsRepository.findOne({
+    if (tagname != undefined)
+      return await this.tagsRepository.find({
         name: Like(`%${tagname}%`),
       });
 
@@ -85,18 +80,13 @@ export class TagsService {
     });
   }
 
-  async updateTag(
-    userinfo: Users,
-    teamid: number,
-    tagid: number,
-    tagname: string,
-  ) {
-    const isjoined = await this.teamMembersRepository.findOne({
-      userid: userinfo.id,
+  async updateTag(id: number, teamid: number, tagid: number, tagname: string) {
+    const isJoined = await this.teamMembersRepository.findOne({
+      userid: id,
       teamid: teamid,
     });
     // no
-    if (isjoined == undefined) {
+    if (isJoined == undefined) {
       throw new HttpException(
         {
           status: HttpStatus.NOT_FOUND,
@@ -106,7 +96,7 @@ export class TagsService {
       );
     }
     // 수정할 권한이 있는가?
-    if (isjoined.state) {
+    if (isJoined.state != 0) {
       throw new HttpException(
         {
           status: HttpStatus.NOT_FOUND,
@@ -123,7 +113,7 @@ export class TagsService {
       throw new HttpException(
         {
           status: HttpStatus.NOT_FOUND,
-          error: '권한이 없습니다.',
+          error: '테그를 찾을 수 없습니다.',
         },
         HttpStatus.NOT_FOUND,
       );
@@ -134,9 +124,9 @@ export class TagsService {
     return await this.tagsRepository.save(tags);
   }
 
-  async removeTags(userinfo: Users, teamid: number, tagid: number) {
+  async removeTags(id: number, teamid: number, tagid: number) {
     const isjoined = await this.teamMembersRepository.findOne({
-      userid: userinfo.id,
+      userid: id,
       teamid: teamid,
     });
     // no
@@ -150,7 +140,7 @@ export class TagsService {
       );
     }
     // 수정할 권한이 있는가?
-    if (isjoined.state) {
+    if (isjoined.state != 0) {
       throw new HttpException(
         {
           status: HttpStatus.NOT_FOUND,
@@ -159,7 +149,7 @@ export class TagsService {
         HttpStatus.NOT_FOUND,
       );
     }
-    const { affected } = await this.tagsRepository.softDelete({
+    const { affected } = await this.tagsRepository.delete({
       id: tagid,
     });
     if (affected) {

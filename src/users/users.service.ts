@@ -1,81 +1,72 @@
-import { Injectable, Inject, HttpException, HttpStatus } from '@nestjs/common';
+import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Users } from 'src/entities';
 import { Repository } from 'typeorm';
+import { UsersUpdate } from './dto/usersUpdate.dto';
 
 @Injectable()
 export class UsersService {
   constructor(
     @InjectRepository(Users) private usersRepository: Repository<Users>,
   ) {}
-  async createUser(userinfo: Users) {
-    const user = await this.usersRepository.findOne({
-      where: [userinfo.socialId],
-      select: ['id'],
-    });
 
-    if (!user) {
+  async createUsers(userinfo: Users) {
+    const isExist = await this.findUsers(userinfo.id);
+    if (isExist == undefined) {
+      const now = new Date();
+      userinfo.createdAt = now;
+      userinfo.updatedAt = now;
       return await this.usersRepository.save(userinfo);
-    } else {
-      throw new HttpException(
-        {
-          status: HttpStatus.NOT_FOUND,
-          error: '이미 존재하는 유저입니다.',
-        },
-        HttpStatus.NOT_FOUND,
-      );
     }
+    throw new HttpException(
+      {
+        status: HttpStatus.NOT_FOUND,
+        error: '이미등록된 유저입니다.',
+      },
+      HttpStatus.NOT_FOUND,
+    );
   }
 
-  async findUser(socialId: number) {
-    const user = await this.usersRepository.findOne({
-      where: { socialId },
-    });
-    if (!user) {
-      throw new HttpException(
-        {
-          status: HttpStatus.NOT_FOUND,
-          error: '해당 유저는 존재하지 않습니다.',
-        },
-        HttpStatus.NOT_FOUND,
-      );
-    } else return user;
+  async findUsers(id: number) {
+    return await this.usersRepository.findOne({ id: id });
   }
 
-  // async updateUser(socialId: number) {
-  //   try {
-  //     const user = await this.findUser(socialId);
-  //   } catch (error) {
-  //     console.log(error);
-  //     return '유저 수정 실패';
-  //   }
-  // }
+  async updateUsers(id: number, updatedUserinfo: UsersUpdate) {
+    const userinfo = await this.findUsers(id);
+    if (userinfo != undefined) {
+      const { profileUrl, name } = updatedUserinfo;
+      const now = new Date();
+      userinfo.profileUrl = profileUrl ? profileUrl : userinfo.profileUrl;
+      userinfo.name = name ? name : userinfo.name;
+      userinfo.updatedAt = now;
+      return await this.usersRepository.save(userinfo);
+    }
+    throw new HttpException(
+      {
+        status: HttpStatus.NOT_FOUND,
+        error: '유저가 존재하지 않습니다.',
+      },
+      HttpStatus.NOT_FOUND,
+    );
+  }
 
-  async removeUser(socialId: number) {
-    console.log(socialId);
-
-    const user = await this.usersRepository.findOne({
-      where: { socialId },
-      select: ['id'],
-    });
-
-    if (!user) {
-      throw new HttpException(
-        {
-          status: HttpStatus.NOT_FOUND,
-          error: '존재하지않는 유저입니다.',
-        },
-        HttpStatus.NOT_FOUND,
-      );
-    } else {
-      await this.usersRepository.remove(user);
+  async removeUser(id: number) {
+    const { affected } = await this.usersRepository.delete({ id: id });
+    if (affected) {
       throw new HttpException(
         {
           status: HttpStatus.OK,
-          error: '유저 삭제 성공',
+          error: '회원 탈퇴가 완료되었습니다.',
         },
         HttpStatus.OK,
       );
     }
+    throw new HttpException(
+      {
+        status: HttpStatus.NOT_FOUND,
+        error: '회원 탐퇴를 실패하였습니다.',
+      },
+      HttpStatus.NOT_FOUND,
+    );
   }
 }

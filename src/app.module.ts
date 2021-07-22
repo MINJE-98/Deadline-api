@@ -8,6 +8,7 @@ import { TeamsModule } from './teams/teams.module';
 import { ItemsModule } from './items/items.module';
 import { TagsModule } from './tags/tags.module';
 import { DaedlineModule } from './daedlines/daedline.module';
+import { TeamMembersModule } from './team-members/team-members.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -31,6 +32,7 @@ import { DaedlineModule } from './daedlines/daedline.module';
     ItemsModule,
     TagsModule,
     DaedlineModule,
+    TeamMembersModule,
   ],
   controllers: [],
   providers: [],
