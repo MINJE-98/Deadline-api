@@ -6,66 +6,106 @@ import {
   Patch,
   Param,
   Delete,
+  UseGuards,
+  Headers,
+  Query,
 } from '@nestjs/common';
-import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBody,
+  ApiHeader,
+  ApiOperation,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
+import { TokenCheck } from 'src/auth/token.check.guard';
+import { UserInfo } from 'src/common/decorator';
+import { TokenAuthError } from 'src/common/dto';
 import { Deadlines } from 'src/entities';
 import { DaedlineService } from './daedline.service';
+import { DeadlinesCreate } from './dto/daedlinesCreate.dto';
+import { DeadlinesUpdate } from './dto/deadlinesUpdate.dto';
 
+@UseGuards(TokenCheck)
 @ApiTags('Deadlines')
-@Controller('daedlines')
+@ApiHeader({
+  name: 'accesstoken',
+  required: true,
+  description: '토큰',
+})
+@ApiResponse({
+  status: 404,
+  description: '유효한 토큰이 아닙니다.',
+  type: TokenAuthError,
+})
+@Controller('teams')
 export class DaedlineController {
   constructor(private readonly daedlineService: DaedlineService) {}
 
-  @Post()
+  @Post(':teamid/deadlines')
   @ApiOperation({
     summary: '유통기한 등록',
     description: '유통기한 등록합니다.',
   })
+  @ApiBody({
+    required: true,
+    type: DeadlinesCreate,
+  })
   @ApiResponse({ status: 200, description: '성공', type: Deadlines })
-  createDeadline(@Body() createDaedlineDto: Deadlines) {
-    return this.daedlineService.createDeadline(createDaedlineDto);
+  createDeadline(
+    @Headers('accesstoken') AccessToken,
+    @Body() body,
+    @Param('teamid') teamid: number,
+    @UserInfo('id') id: number,
+  ) {
+    return this.daedlineService.createDeadline(body, teamid, id);
   }
 
-  @Get()
+  @Get(':teamid/deadlines')
   @ApiOperation({
     summary: '등록한 전체 유통기한 조회',
     description: '등록한 전체 유통기한 가져오기',
   })
   @ApiResponse({ status: 200, description: '성공', type: Deadlines })
-  findAllDeadline() {
-    return this.daedlineService.findAllDeadline();
+  findDeadline(
+    @Headers('accesstoken') AccessToken,
+    @Param('teamid') teamid: number,
+    @UserInfo('id') id: number,
+  ) {
+    return this.daedlineService.findDeadline(teamid, id);
   }
 
-  @Get(':DeadlineId')
+  @Patch(':teamid/deadlines/:deadlineid')
   @ApiOperation({
-    summary: '특정 유통기한 조회',
-    description: '등록한 전체 유통기한 조회합니다.',
+    summary: '유통기한 수정',
+    description: '유통기한 수정합니다',
   })
-  @ApiResponse({ status: 200, description: '성공', type: Deadlines })
-  findDeadline(@Param('DeadlineId') id: string) {
-    return this.daedlineService.findDeadline(+id);
-  }
-
-  @Patch(':DeadlineId')
-  @ApiOperation({
-    summary: '특정 유통기한 수정',
-    description: '등록한 전체 유통기한 수정합니다',
+  @ApiBody({
+    required: true,
+    type: DeadlinesUpdate,
   })
   @ApiResponse({ status: 200, description: '성공', type: Deadlines })
   updateDeadline(
-    @Param('DeadlineId') id: string,
-    @Body() updateDaedlineDto: Deadlines,
+    @Headers('accesstoken') AccessToken,
+    @Body() body,
+    @Param('teamid') teamid: number,
+    @Param('deadlineid') deadlineid: number,
+    @UserInfo('id') id: number,
   ) {
-    return this.daedlineService.updateDeadline(+id, updateDaedlineDto);
+    return this.daedlineService.updateDeadline(body, teamid, id, deadlineid);
   }
 
-  @Delete(':DeadlineId')
+  @Delete(':teamid/deadlines/:deadlineid')
   @ApiOperation({
-    summary: '특정 유통기한 삭제',
-    description: '등록한 전체 유통기한 삭제합니다',
+    summary: '유통기한 삭제',
+    description: '유통기한 삭제합니다',
   })
   @ApiResponse({ status: 200, description: '성공', type: Deadlines })
-  removeDeadline(@Param('DeadlineId') id: string) {
-    return this.daedlineService.removeDeadline(+id);
+  removeDeadline(
+    @Headers('accesstoken') AccessToken,
+    @Param('teamid') teamid: number,
+    @Param('deadlineid') deadlineid: number,
+    @UserInfo('id') id: number,
+  ) {
+    return this.daedlineService.removeDeadline(teamid, deadlineid, id);
   }
 }

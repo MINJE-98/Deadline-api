@@ -35,7 +35,7 @@ export class Deadlines {
 
   @ApiProperty({
     example: '1',
-    description: '팀 아이디',
+    description: '아이템 아이디',
   })
   @Column('int', {
     name: 'itemid',
