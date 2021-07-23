@@ -1,6 +1,5 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { join } from 'path';
 import { ConfigModule } from '@nestjs/config';
 import * as e from './entities';
 import { UsersModule } from './users/users.module';
@@ -9,6 +8,7 @@ import { ItemsModule } from './items/items.module';
 import { TagsModule } from './tags/tags.module';
 import { DaedlineModule } from './daedlines/daedline.module';
 import { TeamMembersModule } from './team-members/team-members.module';
+import { ImageModule } from './image/image.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -33,6 +33,7 @@ import { TeamMembersModule } from './team-members/team-members.module';
     TagsModule,
     DaedlineModule,
     TeamMembersModule,
+    ImageModule,
   ],
   controllers: [],
   providers: [],
