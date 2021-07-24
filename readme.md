@@ -11,10 +11,7 @@ $ npm install
 
 ```bash
 $ npm run start
-
-## swagger
-
-http://localhost:3000/api
+```
 
 ## EndPoint
 
@@ -122,5 +119,7 @@ PATCH
 DELETE
 ​/teams​/{teamid}​/deadlines​/{deadlineid}
 유통기한 삭제
+
+
 
 
